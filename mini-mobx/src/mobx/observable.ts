@@ -1,8 +1,8 @@
 import shortid from 'shortid';
 import dependenceManager from './dependenceManager'
 
-export function observable(this: any, _target: any, _name: any, descriptor: any): any {
-    const v = descriptor.initializer.call(this);
+export function observable(_target: any, _name: any, descriptor: any): any {
+    const v = descriptor.initializer();
     const o = new Observable(v);
     return {
         enumerable: true,
