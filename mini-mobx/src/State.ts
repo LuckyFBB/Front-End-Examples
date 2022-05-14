@@ -14,14 +14,13 @@ export class Counter {
 }
 
 
-export class Name {
+export class User {
     // @ts-ignore
-    @observable name = "FBB"
+    @observable user = { name: "FBB", age: 20 }
     @computed get getNameLength() {
-        return this.name.length
+        return this.user.name.length
     }
     updateName = (value: string) => {
-        console.log(value)
-        this.name = value
+        this.user.name = value
     }
 }

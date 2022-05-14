@@ -9,7 +9,7 @@ class DependenceManager {
     collect(id: string) {
         if (DependenceManager.Dep) {
             this._store[id] = this._store[id] || {}
-            this._store[id].target = DependenceManager.Target
+            this._store[id].target = DependenceManager.Target || this._store[id].target
             this._store[id].watchers = this._store[id].watchers || []
             this._store[id].watchers.push(DependenceManager.Dep);
         }

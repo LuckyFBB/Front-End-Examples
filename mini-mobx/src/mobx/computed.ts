@@ -3,23 +3,22 @@ import dependenceManager from "./dependenceManager";
 
 export function computed(target: any, name: any, descriptor: any) {
     const getter = descriptor.get; // get 函数
-    const _computed = new Computed(target, getter);
-
+    const _watcher = new ComputeWatcher(target, getter);
     return {
         enumerable: true,
         configurable: true,
         get: function () {
-            _computed.target = this
-            return _computed.get();
+            _watcher.target = this
+            return _watcher.get();
         }
     };
 }
 
-class Computed {
+class ComputeWatcher {
     id: string;
     target: any;
     getter: any;
-    // 标识是否绑定过recomputed依赖，只需要绑定一次
+    // 标识是否绑定过computed的依赖，只需要绑定一次
     hasBindAutoReCompute: any;
     value: any;
     constructor(target: any, getter: any) {
