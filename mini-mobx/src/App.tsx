@@ -7,7 +7,7 @@ class Test extends React.Component<any, any> {
     formRef: any;
     componentDidMount() {
         autorun(() => {
-            console.log("autorun catch--", this.props.counter.count)
+            console.log("autorun catch--age", this.props.currUser.user.age)
         })
     }
     handleInput = () => {

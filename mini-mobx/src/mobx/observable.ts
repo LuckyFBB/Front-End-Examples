@@ -1,57 +1,57 @@
-import shortid from 'shortid';
 import dependenceManager from './dependenceManager'
+import shortid from 'shortid';
 
-export function observable(target: any, name?: any, descriptor?: any): any {
-    const value = descriptor.initializer();
-    const _watcher = new Watcher();
-    // 创建代理
-    let proxyValue = createProxy(value, _watcher)
+
+
+export function observable(target: any, name: any, descriptor: { initializer: () => any; }) {
+    const v = descriptor.initializer();
+    createDeepWatcher(v)
+    const o = new Watcher(v, name);
     return {
         enumerable: true,
         configurable: true,
         get: function () {
-            _watcher.collect();
-            return proxyValue
+            return o.get();
         },
-        set: function (value: any) {
-            proxyValue = value
-            return _watcher.notify();
+        set: function (v: any) {
+            createDeepWatcher(v)
+            return o.set(v);
+        }
+    };
+};
+
+function createDeepWatcher(target: any) {
+    if (typeof target === "object") {
+        for (let property in target) {
+            if (target.hasOwnProperty(property)) {
+                const observable = new Watcher(target[property], property);
+                Object.defineProperty(target, property, {
+                    get() {
+                        debugger
+                        return observable.get();
+                    },
+                    set(value) {
+                        return observable.set(value);
+                    }
+                });
+                createDeepWatcher(target[property])
+            }
         }
     }
 }
-
-// 深度设置Proxy对象代理
-function createProxy(val: { [x: string]: any; }, watcher: Watcher) {
-    if (typeof val !== "object") return val;
-    const handler = {
-        set: (target: object, key: PropertyKey, value: any) => {
-            const setValue = Reflect.set(target, key, value)
-            watcher.notify()
-            return setValue
-        },
-        get: (target: object, key: PropertyKey) => {
-            watcher.collect()
-            return Reflect.get(target, key)
-        }
-    }
-    // 深度递归进行Proxy代理，此时的递归树相当于是后序遍历进行代理
-    for (let key in val) {
-        val[key] = createProxy(val[key], new Watcher());
-    }
-    return new Proxy(val, handler);
-}
-
 class Watcher {
-    id: string;
-    constructor() {
-        this.id = `ob_${shortid()}`;
+    id: string
+    value: any;
+    constructor(v: any, property: string) {
+        this.id = `ob_${property}_${shortid()}`;
+        this.value = v;
     }
-    // 调用get时，收集所有观察者
-    collect() {
-        dependenceManager.collect(this.id)
+    get() {
+        dependenceManager.collect(this.id);
+        return this.value;
     }
-    // 调用set时，通知所有观察者
-    notify() {
-        dependenceManager.trigger(this.id)
+    set(v: any) {
+        this.value = v;
+        dependenceManager.trigger(this.id);
     }
 }
