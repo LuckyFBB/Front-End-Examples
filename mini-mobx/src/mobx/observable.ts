@@ -1,21 +1,18 @@
 import dependenceManager from './dependenceManager'
 import shortid from 'shortid';
 
-
-
 export function observable(target: any, name: any, descriptor: { initializer: () => any; }) {
     const v = descriptor.initializer();
     createDeepWatcher(v)
-    const o = new Watcher(v, name);
+    const watcher = new Watcher(v, name);
     return {
         enumerable: true,
         configurable: true,
         get: function () {
-            return o.get();
+            return watcher.get();
         },
         set: function (v: any) {
-            createDeepWatcher(v)
-            return o.set(v);
+            return watcher.set(v);
         }
     };
 };
@@ -24,14 +21,13 @@ function createDeepWatcher(target: any) {
     if (typeof target === "object") {
         for (let property in target) {
             if (target.hasOwnProperty(property)) {
-                const observable = new Watcher(target[property], property);
+                const watcher = new Watcher(target[property], property);
                 Object.defineProperty(target, property, {
                     get() {
-                        debugger
-                        return observable.get();
+                        return watcher.get();
                     },
                     set(value) {
-                        return observable.set(value);
+                        return watcher.set(value);
                     }
                 });
                 createDeepWatcher(target[property])
