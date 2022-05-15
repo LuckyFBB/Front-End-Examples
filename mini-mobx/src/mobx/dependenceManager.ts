@@ -11,7 +11,8 @@ class DependenceManager {
             this._store[id] = this._store[id] || {}
             this._store[id].target = DependenceManager.Target || this._store[id].target
             this._store[id].watchers = this._store[id].watchers || []
-            this._store[id].watchers.push(DependenceManager.Dep);
+            if (!this._store[id].watchers.includes(DependenceManager.Dep))
+                this._store[id].watchers.push(DependenceManager.Dep);
         }
     }
     trigger(id: string) {

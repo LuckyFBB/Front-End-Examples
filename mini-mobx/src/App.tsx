@@ -1,26 +1,22 @@
 import React from 'react';
 import autorun from './mobx/autorun';
 import { observer } from "./mobx/observe"
-import { Counter, User } from './State';
+import { User } from './State';
 @observer
 class Test extends React.Component<any, any> {
     formRef: any;
     componentDidMount() {
         autorun(() => {
-            console.log("autorun catch--", this.props.counter.count)
+            console.log("autorun catch--", this.props.currUser.user.age)
         })
     }
     handleInput = () => {
         this.props.currUser.updateName(this.formRef?.value)
     }
     render() {
-        const { currUser, counter } = this.props
+        const { currUser } = this.props
+        console.log(currUser)
         return <div>
-            <div>
-                Current Count :{counter.count}
-                <button onClick={counter.increment}>increment</button>
-                <button onClick={counter.decrement}>decrement</button>
-            </div>
             <br />
             <div>
                 <input ref={e => this.formRef = e} placeholder="please input your name" />
@@ -33,7 +29,7 @@ class Test extends React.Component<any, any> {
 }
 
 function App() {
-    return <Test counter={new Counter()} currUser={new User()} />
+    return <Test currUser={new User()} />
 }
 
 export default App;
