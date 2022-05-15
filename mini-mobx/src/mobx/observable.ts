@@ -9,10 +9,10 @@ export function observable(target: any, name: any, descriptor: { initializer: ()
         enumerable: true,
         configurable: true,
         get: function () {
-            return watcher.get();
+            return watcher.collect();
         },
         set: function (v: any) {
-            return watcher.set(v);
+            return watcher.notify(v);
         }
     };
 };
@@ -24,10 +24,10 @@ function createDeepWatcher(target: any) {
                 const watcher = new Watcher(target[property], property);
                 Object.defineProperty(target, property, {
                     get() {
-                        return watcher.get();
+                        return watcher.collect();
                     },
                     set(value) {
-                        return watcher.set(value);
+                        return watcher.notify(value);
                     }
                 });
                 createDeepWatcher(target[property])
@@ -42,12 +42,12 @@ class Watcher {
         this.id = `ob_${property}_${shortid()}`;
         this.value = v;
     }
-    get() {
+    collect() {
         dependenceManager.collect(this.id);
         return this.value;
     }
-    set(v: any) {
+    notify(v: any) {
         this.value = v;
-        dependenceManager.trigger(this.id);
+        dependenceManager.notify(this.id);
     }
 }

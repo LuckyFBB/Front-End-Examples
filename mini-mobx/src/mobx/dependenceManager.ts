@@ -15,7 +15,7 @@ class DependenceManager {
                 this._store[id].watchers.push(DependenceManager.Dep);
         }
     }
-    trigger(id: string) {
+    notify(id: string) {
         const store = this._store[id];
         if (store && store.watchers) {
             store.watchers.forEach((watch: () => void) => {

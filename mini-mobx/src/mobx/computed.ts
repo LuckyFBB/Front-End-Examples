@@ -3,7 +3,7 @@ import dependenceManager from "./dependenceManager";
 
 export function computed(target: any, name: any, descriptor: any) {
     const getter = descriptor.get; // get 函数
-    const _computed = new Computed(target, getter);
+    const _computed = new ComputedWatcher(target, getter);
 
     return {
         enumerable: true,
@@ -15,7 +15,7 @@ export function computed(target: any, name: any, descriptor: any) {
     };
 }
 
-class Computed {
+class ComputedWatcher {
     id: string;
     target: any;
     getter: any;
@@ -39,7 +39,7 @@ class Computed {
     // 依赖属性变化时调用的函数
     _reComputed() {
         this.value = this.getter.call(this.target);
-        dependenceManager.trigger(this.id);
+        dependenceManager.notify(this.id);
     }
     // 提供给外部调用时收集依赖使用
     get() {
