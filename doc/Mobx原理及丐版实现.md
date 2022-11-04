@@ -22,11 +22,9 @@ export class TodoList {
 }
 ```
 
-Mobx 借助于装饰器来实现，是的代码更加简洁。使用了可观察对象，Mobx 可以直接修改状态，不用像 Redux 那样写 actions/reducers()。Redux 是遵循 setState 的流程，MobX就是干掉了 setState 的机制
+Mobx 借助于装饰器来实现，是的代码更加简洁。使用了可观察对象，Mobx 可以直接修改状态，不用像 Redux 那样写 actions/reducers。Redux 是遵循 setState 的流程，MobX就是干掉了 setState 的机制
 
-通过响应式编程使得状态管理变得简单和可扩展，任何源自应用状态的东西都应该自动的获得
-
-MobX v5 版本利用 ES6 的`proxy`来追踪属性，以前的旧版本通过`Object.defineProperty`实现的。通过隐式订阅，自动追踪被监听的对象变化
+通过响应式编程使得状态管理变得简单和可扩展。MobX v5 版本利用 ES6 的`proxy`来追踪属性，以前的旧版本通过`Object.defineProperty`实现的。通过隐式订阅，自动追踪被监听的对象变化
 
 Mobx 的执行流程，一张官网结合上述例子的图
 
@@ -35,10 +33,13 @@ Mobx 的执行流程，一张官网结合上述例子的图
 MobX将应用变为响应式可归纳为下面三个步骤
 
 1. 定义状态并使其可观察
+
     使用`observable`对存储的数据结构成为可观察状态
 2. 创建视图以响应状态的变化
+
     使用`observer`来监听视图，如果用到的数据发生改变视图会自动更新
 3. 更改状态
+
     使用`action`来定义修改状态的方法
 
 ## Mobx核心概念
@@ -96,11 +97,11 @@ export class TodoList {
 
 ### action
 
-动作是任何用来修改状态的东西。MobX 中的 action 不像 redux 中是必需的，把一些修改state 的操作都规范使用 action 做标注。
+动作是任何用来修改状态的东西。MobX 中的 action 不像 redux 中是必需的，把一些修改 state 的操作都规范使用 action 做标注。
 
-在 MobX 中可以随意更改`todos.push({title:'coding', done: false})`，state 也是可以有作用的，但是这样杂乱无章不好定位是哪里触发了 state 的变化，建议在任何更新`observable`或者有副作用的函数上使用 actions。
+在 MobX 中可以随意更改`todos.push({ title:'coding', done: false })`，state 也是可以有作用的，但是这样杂乱无章不好定位是哪里触发了 state 的变化，建议在任何更新`observable`或者有副作用的函数上使用 actions。
 
-在严格模式`useStrict(true)`下，强制使用action
+在严格模式`useStrict(true)`下，强制使用 action
 
 ```jsx
 // 非action使用
@@ -126,7 +127,7 @@ class TodoList {
 
 ### Reactions
 
-计算值computed是自动响应状态变化的值。反应是自动响应状态变化是的副作用，反应可以确保相关状态变化时指定的副作用执行。
+计算值 computed 是自动响应状态变化的值。反应是自动响应状态变化是的副作用，反应可以确保相关状态变化时指定的副作用执行。
 
 1. autorun
 
@@ -195,7 +196,7 @@ export default class TodoListView extends Component {
 
 ## Mobx原理实现
 
-前文中提到Mobx 实现响应式数据，采用了`Object.defineProperty`或者`Proxy`
+前文中提到 Mobx 实现响应式数据，采用了`Object.defineProperty`或者`Proxy`
 
 上面讲述到使用 autorun 会在第一次执行并且依赖的属性变化时也会执行。
 
@@ -209,9 +210,9 @@ autorun(() => {
 当我们使用 observable 创建了一个可观察对象`user`，autorun 就会去监听`user.name`是否发生了改变。等于`user.name`被 autorun 监控了，一旦有任何变化就要去通知它
 
 ```jsx
-user.watchers.push(watch)
+user.name.watchers.push(watch)
 // 一旦user的数据发生了改变就要去通知观察者
-user.watchers.forEach(watch => watch())
+user.name.watchers.forEach(watch => watch())
 ```
 
 ![action](https://user-images.githubusercontent.com/38368040/167146483-d49a1e31-a716-4171-a9c8-71e1366657dd.png)
@@ -235,7 +236,7 @@ autorun(function func2() {
 })
 ```
 
-对于上述代码来说，counter.count 的 watchers 只有 func1，[user.name](http://user.name/) 的 watchers则有 func1/func2
+对于上述代码来说，counter.count 的 watchers 只有 func1，user.name 的 watchers 则有 func1/func2
 
 实现一下观察者类 Watcher，借助 shortid 来区分不同的观察者实例
 ```jsx
@@ -246,12 +247,12 @@ class Watcher {
         this.id = `ob_${property}_${shortid()}`;
         this.value = v;
     }
-		// 调用get时，收集所有观察者
+    // 调用get时，收集所有观察者
     collect() {
         dependenceManager.collect(this.id);
         return this.value;
     }
-		// 调用set时，通知所有观察者
+    // 调用set时，通知所有观察者
     notify(v: any) {
         this.value = v;
         dependenceManager.notify(this.id);
@@ -259,7 +260,7 @@ class Watcher {
 }
 ```
 
-实现一个简单的装饰器，需要拦截我们属性的get/set方法，并且使用Object.defineProperty进行深度拦截
+实现一个简单的装饰器，需要拦截我们属性的 get/set 方法，并且使用 Object.defineProperty 进行深度拦截
 
 ```jsx
 export function observable(target: any, name: any, descriptor: { initializer: () => any; }) {
@@ -304,7 +305,7 @@ function createDeepWatcher(target: any) {
 
 ### autorun
 
-前面说到 autorun 会立即执行一次，并且会将函数收集起来，存储到对应的`observable.id`的watchers中。autorun 实现了收集依赖，执行对应函数。再执行对应函数的时候，会调用到对应`observable`对象的`get`方法，来收集依赖
+前面说到 autorun 会立即执行一次，并且会将函数收集起来，存储到对应的`observable.id`的 watchers 中。autorun 实现了收集依赖，执行对应函数。再执行对应函数的时候，会调用到对应`observable`对象的`get`方法，来收集依赖
 
 ```jsx
 export default function autorun(handler) {
@@ -318,8 +319,8 @@ export default function autorun(handler) {
 
 - beginCollect: 标识开始收集依赖，将依赖函数存到一个类全局变量中
 - collect(id): 调用`get`方法时，将依赖函数放到存入到对应 id 的依赖数组中
-- notify: 当执行`set`的时候，根据 id 来执行数组中的函数依赖
-- endCollect: 清除刚开始的函数依赖，以便于下一次收集
+- notify: 当执行`set`的时候，根据 id 来执行数组中的函数依赖
+- endCollect: 清除刚开始的函数依赖，以便于下一次收集
 
 ```jsx
 class DependenceManager {
@@ -358,7 +359,7 @@ computed 的三个特点:
 
 - computed 方法是一个 get 方法
 - computed 会根据依赖的属性重新计算值
-- 依赖 computed 的函数也会被重新执行
+- 依赖 computed 的函数也会被重新执行
 
 发现 computed 的实现大致和 observable 相似，从以上特点可以推断出 computed 需要两次收集依赖，一次是收集 computed 所依赖的属性，一次是依赖 computed 的函数
 
@@ -462,7 +463,7 @@ export function observer(target: any) {
     ![mobx1](https://user-images.githubusercontent.com/38368040/167146604-eb1b5ef5-278d-482a-b4a3-dd3d40d71c38.png)
 
 2. 修改数据的方式
-    - 他们修改状态的方式是不同的，Redux 每一次都返回了新的 state；Mobx 每次修改的都是同一个状态对象，基于响应式原理，`get`时收集依赖，`set`时通知所有的依赖
+    - 他们修改状态的方式是不同的，Redux 每一次都返回了新的 state。Mobx 每次修改的都是同一个状态对象，基于响应式原理，`get`时收集依赖，`set`时通知所有的依赖
 
     - 当 state 发生改变时，Redux 会通知所有使用 connect 包裹的组件；Mobx 由于收集了每个属性的依赖，能够精准通知
 
