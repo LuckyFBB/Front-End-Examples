@@ -48,7 +48,6 @@ MobX将应用变为响应式可归纳为下面三个步骤
 
 给数据对象添加可观察的功能，支持任何的数据结构
 
-`observable`之后的数据不是普通的数据形式，所以在内部使用时需要`toJS()`转化
 
 ```jsx
 const todos = observable([{
@@ -381,24 +380,7 @@ export function computed(target: any, name: any, descriptor: any) {
 }
 ```
 
-```jsx
-class ComputedWatcher {
-    id: string;
-    target: any;
-    getter: any;
-    constructor(target: any, getter: any) {
-        this.id = `computed_${shortid()}`
-        this.target = target
-        this.getter = getter
-    }
-    // 提供给外部调用时收集依赖使用
-    get() {
-        dependenceManager.collect(this.id);
-    }
-}
-```
-
-在执行 get 方法的时候，我们和之前一样，去收集一下依赖 computed 的函数，丰富 get 方法
+实现 ComputedWatcher 类，和 Watcher 类差不多。在执行 get 方法的时候，我们和之前一样，去收集一下依赖 computed 的函数，丰富 get 方法
 
 ```jsx
 class ComputedWatcher {
