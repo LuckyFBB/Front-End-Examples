@@ -50,6 +50,6 @@ class Watcher {
     }
     // 调用set时，通知所有观察者
     notify() {
-        dependenceManager.trigger(this.id)
+        dependenceManager.notify(this.id)
     }
 }

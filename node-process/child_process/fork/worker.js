@@ -1,0 +1,1 @@
+console.log(`FBB's worker , pid: ${process.pid}`)
