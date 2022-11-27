@@ -4,7 +4,7 @@ export function computed(target: any, name: any, descriptor: any) {
         return new Proxy(target, {
             get: (target) => {
                 return getter.call(target);
-            }
-        })
-    }, 0)
+            },
+        });
+    }, 0);
 }

@@ -1,11 +1,11 @@
-import shortid from 'shortid';
-import dependenceManager from './dependenceManager'
+import shortid from "shortid";
+import dependenceManager from "./dependenceManager";
 
-const watcherMap = new Map();
+const watcherMap = new WeakMap();
 
 // @ts-ignore
 export function observable(obj): any {
-    return createProxy(obj)
+    return createProxy(obj);
 }
 
 // 深度设置Proxy对象代理
@@ -13,15 +13,16 @@ export function observable(obj): any {
 function createProxy(obj: any) {
     return new Proxy(obj, {
         get: (target, propKey) => {
-            if (typeof target[propKey] === 'object') {
+            if (typeof target[propKey] === "object") {
                 return observable(target[propKey]);
             } else {
                 if (!watcherMap.get(target)) {
-                    watcherMap.set(target, {})
+                    watcherMap.set(target, {});
                 }
                 const targetObj = watcherMap.get(target);
-                if (!targetObj[propKey]) targetObj[propKey] = new Watcher(String(propKey))
-                targetObj[propKey].collect()
+                if (!targetObj[propKey])
+                    targetObj[propKey] = new Watcher(String(propKey));
+                targetObj[propKey].collect();
                 return target[propKey];
             }
         },
@@ -30,13 +31,13 @@ function createProxy(obj: any) {
                 target[propKey] = value;
                 const targetObj = watcherMap.get(target);
                 if (targetObj && targetObj[propKey]) {
-                    const watcher = targetObj[propKey]
-                    watcher && watcher.notify()
+                    const watcher = targetObj[propKey];
+                    watcher && watcher.notify();
                 }
             }
             return true;
-        }
-    })
+        },
+    });
 }
 
 class Watcher {
@@ -46,10 +47,10 @@ class Watcher {
     }
     // 调用get时，收集所有观察者
     collect() {
-        dependenceManager.collect(this.id)
+        dependenceManager.collect(this.id);
     }
     // 调用set时，通知所有观察者
     notify() {
-        dependenceManager.notify(this.id)
+        dependenceManager.notify(this.id);
     }
 }
