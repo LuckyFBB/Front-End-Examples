@@ -1,5 +1,61 @@
-const fs = require("fs");
-const stream = require("stream");
+// process.stdin.on("data", function (chunk) {
+//     console.log(chunk.toString());
+// });
+
+// process.stdin.pipe(process.stdout);
+
+// readFile
+// const fs = require("fs");
+// const path = require("path");
+
+// const fileName = path.resolve(__dirname, "index.html");
+// fs.readFile(fileName, function (err, data) {
+//     console.log(data.toString().length);
+// });
+
+// stream 读取文件
+/* 事件模式 */
+// const fs = require("fs");
+// const path = require("path");
+// const fileName = path.resolve(__dirname, "index.html");
+// let stream = fs.createReadStream(fileName);
+// let data;
+// stream.on("data", (chunk) => {
+//     console.log("chunkLength---", chunk.toString().length);
+//     data += chunk;
+// });
+// stream.on("end", () => {
+//     console.log("dataLength", data.length);
+// });
+
+/* pipe */
+// const readStream = fs.createReadStream("./readFile.js");
+// const writeStream = fs.createWriteStream("./readFile1.js");
+// readStream.pipe(writeStream);
+
+// reqStream
+// const serverCallback = (req, res) => {
+//     let data = "";
+//     if (req.url === "/stream") {
+//         const stream = fs.createReadStream("readFile.js");
+//         stream.on("data", (chunk) => {
+//             data += chunk.toString();
+//         });
+//         stream.on("end", () => {
+//             res.writeHead(200, { "Content-type": "text/html" });
+//             res.end(data);
+//         });
+//     }
+// };
+
+// http.createServer(serverCallback).listen(8000);
+
+// const serverCallback = (req, res) => {
+//     const readStream = fs.createReadStream("readFile.js");
+//     res.writeHead(200, { "Content-type": "text/html" });
+//     readStream.pipe(res);
+// };
+// http.createServer(serverCallback).listen(8000);
 
 // const rs = fs.createReadStream("../console.js", {
 //     start: 30,
