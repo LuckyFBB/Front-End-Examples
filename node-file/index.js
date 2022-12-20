@@ -56,10 +56,41 @@
 // });
 
 // Stream 使用
-const fs = require("fs");
-const path = require("path");
-const readStream = fs.createReadStream(
-    path.resolve(__dirname, "../doc/Mobx原理及丐版实现.md")
-);
-const writeStream = fs.createWriteStream(path.resolve("target.txt"));
-readStream.pipe(writeStream);
+// const fs = require("fs");
+// const path = require("path");
+// const readStream = fs.createReadStream(
+//     path.resolve(__dirname, "../doc/Mobx原理及丐版实现.md")
+// );
+// const writeStream = fs.createWriteStream(path.resolve("target.txt"));
+// readStream.pipe(writeStream);
+
+// 过滤文件
+// const fs = require("fs");
+// const path = require("path");
+// const { promisify } = require("util");
+// const reg = new RegExp("(.ts[x]*|.js[x]*|.json)$");
+// const targetPath = path.resolve(__dirname, "../mini-proxy-mobx");
+
+// const readDir = (targetPath, callback) => {
+//     fs.readdir(targetPath, (err, files) => {
+//         if (err) callback(err);
+//         files.forEach(async (file) => {
+//             const filePath = path.resolve(__dirname, `${targetPath}/${file}`);
+//             const stats = await promisify(fs.stat)(filePath);
+//             if (stats.isDirectory()) {
+//                 await readDir(filePath);
+//             } else {
+//                 checkFile(filePath);
+//             }
+//         });
+//     });
+// };
+// const checkFile = (file) => {
+//     if (reg.test(file)) {
+//         console.log(file);
+//     }
+// };
+
+// readDir(targetPath, (err) => {
+//     throw err;
+// });
