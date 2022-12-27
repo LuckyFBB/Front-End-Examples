@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <script src="https://cdn.bootcdn.net/ajax/libs/axios/0.21.1/axios.min.js"></script>
+        <title>文件上传</title>
+    </head>
+    <body>
+        <input accept="image/*" type="file" id="uploadFile" />
+        <button onclick="uploadFile()">提交文件</button>
+    </body>
+    <script>
+        const uploadFileEle = document.querySelector("#uploadFile");
+        const request = axios.create({
+            baseURL: "http://localhost:3000/",
+            timeout: 60000,
+        });
+        function uploadFile() {
+            if (!uploadFileEle?.files?.length) return alert("请选择文件");
+            console.log(uploadFileEle.files);
+            const file = uploadFileEle.files[0];
+            upload("/uploadSingle", file);
+        }
+        function upload(url, file, fieldName = "file") {
+            let formData = new FormData();
+            formData.set(fieldName, file);
+            request.post(url, formData, {
+                // 监听上传进度
+                onUploadProgress: function (progressEvent) {
+                    const percentCompleted = Math.round(
+                        (progressEvent.loaded * 100) / progressEvent.total
+                    );
+                    console.log(percentCompleted);
+                },
+            });
+        }
+    </script>
+</html>
