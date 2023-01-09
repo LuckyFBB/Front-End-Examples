@@ -8,7 +8,7 @@
         <title>文件上传</title>
     </head>
     <body>
-        <input accept="image/*" type="file" id="uploadFile" />
+        <input accept="image/*" type="file" id="uploadFile" multiple />
         <button onclick="uploadFile()">提交文件</button>
     </body>
     <script>
@@ -19,12 +19,14 @@
         });
         function uploadFile() {
             if (!uploadFileEle?.files?.length) return alert("请选择文件");
-            const file = uploadFileEle.files[0];
-            upload("/uploadSingle", file);
+            const files = uploadFileEle.files;
+            upload("/uploadMulti", files);
         }
-        function upload(url, file, fieldName = "file") {
+        function upload(url, files, fieldName = "file") {
             let formData = new FormData();
-            formData.set(fieldName, file);
+            Array.from(files).forEach((file) => {
+                formData.append(fieldName, file);
+            });
             request.post(url, formData, {
                 // 监听上传进度
                 onUploadProgress: function (progressEvent) {
