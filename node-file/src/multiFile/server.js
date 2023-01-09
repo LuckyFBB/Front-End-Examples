@@ -31,14 +31,18 @@ router.get("/", async (ctx) => {
 });
 
 router.post(
-    "/uploadSingle",
+    "/uploadMulti",
     async (ctx, next) => {
         try {
             await next();
+            console.log(ctx.files);
+            const urls = ctx.files.file.map(
+                (file) => `${RESOURCE_URL}/${file.originalname}`
+            );
             ctx.body = {
                 code: 1,
                 msg: "文件上传成功",
-                url: `${RESOURCE_URL}/${ctx.file.originalname}`,
+                urls,
             };
         } catch (error) {
             console.log(error);
@@ -48,7 +52,7 @@ router.post(
             };
         }
     },
-    multerUpload.single("file")
+    multerUpload.fields([{ name: "file" }])
 );
 
 // 注册中间件
