@@ -4,10 +4,11 @@ const serve = require("koa-static");
 const cors = require("@koa/cors");
 const multer = require("@koa/multer");
 const Router = require("@koa/router");
+const { PORT } = require("../http");
 
 const app = new Koa();
 const router = new Router();
-const PORT = 3000;
+
 // 上传后资源的URL地址
 const RESOURCE_URL = `http://localhost:${PORT}`;
 // 存储上传文件的目录
@@ -25,10 +26,6 @@ const storage = multer.diskStorage({
 });
 
 const multerUpload = multer({ storage });
-
-router.get("/", async (ctx) => {
-    ctx.body = "yohe, welcome";
-});
 
 router.post(
     "/uploadMulti",

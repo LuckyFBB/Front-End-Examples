@@ -4,11 +4,10 @@ const serve = require("koa-static");
 const cors = require("@koa/cors");
 const multer = require("@koa/multer");
 const Router = require("@koa/router");
-const fse = require("fs-extra");
 
 const app = new Koa();
 const router = new Router();
-const PORT = 3000;
+const PORT = 8888;
 // 上传后资源的URL地址
 const RESOURCE_URL = `http://localhost:${PORT}`;
 // 存储上传文件的目录
@@ -16,33 +15,27 @@ const UPLOAD_DIR = path.join(__dirname, "../public");
 
 const storage = multer.diskStorage({
     destination: async function (req, file, cb) {
-        // 处理 @ 符号，转换为正确的地址，且根据正确的路径生成目录
-        const relativePath = file.originalname.replace(/@/g, path.sep);
-        const index = relativePath.lastIndexOf(path.sep);
-        const fileDir = path.join(UPLOAD_DIR, relativePath.substr(0, index));
-        await fse.ensureDir(fileDir);
-        cb(null, fileDir);
+        // 设置文件的存储目录
+        cb(null, UPLOAD_DIR);
     },
     filename: function (req, file, cb) {
-        const parts = file.originalname.split("@");
-        cb(null, `${parts[parts.length - 1]}`);
+        // 设置文件名
+        cb(null, `${file.originalname}`);
     },
 });
 
 const multerUpload = multer({ storage });
 
 router.post(
-    "/uploadDirectory",
+    "/uploadBig",
     async (ctx, next) => {
         try {
             await next();
-            const urls = ctx.files.file.map(
-                (file) => `${RESOURCE_URL}/${file.originalname.replace(/\@/g, "/")}`
-            );
+            console.log(ctx);
             ctx.body = {
                 code: 1,
                 msg: "文件上传成功",
-                urls,
+                url: `${RESOURCE_URL}/${ctx.file.originalname}`,
             };
         } catch (error) {
             console.log(error);
@@ -52,7 +45,7 @@ router.post(
             };
         }
     },
-    multerUpload.fields([{ name: "file" }])
+    multerUpload.single("file")
 );
 
 // 注册中间件

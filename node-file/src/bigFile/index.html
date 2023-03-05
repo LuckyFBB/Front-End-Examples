@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <script src="https://cdn.bootcdn.net/ajax/libs/axios/0.21.1/axios.min.js"></script>
+        <title>文件上传</title>
+    </head>
+    <body>
+        <input accept="mp3/*" type="file" id="uploadFile" />
+        <button onclick="uploadFile()">提交文件</button>
+    </body>
+    <script>
+        const BIG_FILE_SIZE = 25 * 1024 * 1024;
+        const SLICE_FILE_SIZE = 5 * 1024 * 1024;
+        const uploadFileEle = document.querySelector("#uploadFile");
+        const request = axios.create({
+            baseURL: "http://localhost:3000/",
+            timeout: 60000,
+        });
+        function uploadFile() {
+            if (!uploadFileEle?.files?.length) return alert("请选择文件");
+            const file = uploadFileEle.files[0];
+            if (file.size > BIG_FILE_SIZE) {
+                // big handle
+                const sliceList = getSliceList(file);
+                uploadSlice(sliceList);
+            }
+            // // normal handle
+            // upload("/uploadSingle", file);
+        }
+        async function uploadSlice(list) {
+            const requestList = list
+                .map(({ slice, sliceName, name }, index) => {
+                    const formData = new FormData();
+                    formData.append("slice", slice);
+                    formData.append("sliceName", sliceName);
+                    formData.append("name", name);
+                    formData.set('file', slice);
+                    return { formData, index, sliceName };
+                })
+                .map(({ formData }) => {
+                    request.post("/uploadBig", formData, {
+                        // 监听上传进度
+                        onUploadProgress: function (progressEvent) {
+                            const percentCompleted = Math.round(
+                                (progressEvent.loaded * 100) /
+                                    progressEvent.total
+                            );
+                            console.log(percentCompleted);
+                        },
+                    });
+                });
+            await Promise.all(requestList);
+        }
+        function getSliceList(file) {
+            const sliceList = [];
+            let curSize = 0;
+            let index = 0;
+            while (curSize < file.size) {
+                sliceList.push({
+                    slice: file.slice(curSize, (curSize += SLICE_FILE_SIZE)),
+                    name: file.name,
+                    sliceName: `${file.name}-${index}`,
+                });
+                index++;
+            }
+            return sliceList;
+        }
+        function upload(url, file, fieldName = "file") {
+            let formData = new FormData();
+            formData.set(fieldName, file);
+            request.post(url, formData, {
+                // 监听上传进度
+                onUploadProgress: function (progressEvent) {
+                    const percentCompleted = Math.round(
+                        (progressEvent.loaded * 100) / progressEvent.total
+                    );
+                    console.log(percentCompleted);
+                },
+            });
+        }
+    </script>
+</html>
