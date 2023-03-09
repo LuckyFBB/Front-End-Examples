@@ -43,3 +43,56 @@
 // console.log(buffer.toString("base64")); // aGkgc2h1YW5neHUh
 // const baseBuffer = Buffer.alloc(12, "aGkgc2h1YW5neHUh", "base64");
 // console.log(baseBuffer.toString()); // hi shuangxu!
+
+// const buffer = new ArrayBuffer(8);
+// const int8Array = new Int8Array(buffer);
+// int8Array[0] = 30;
+// int8Array[1] = 41;
+// const int16Array = new Int16Array(buffer);
+// console.log(int16Array);
+// const dataView = new DataView(buffer);
+// dataView.setInt16(2, 256, true);
+// let int16Array1 = new Int16Array(buffer);
+
+// int16Array1[0] = 256;
+// console.log(int16Array1);
+// const int8Array1 = new Int8Array(buffer);
+// console.log(int8Array1);
+
+// function isLittleEndian() {
+//     const buf = new ArrayBuffer(2);
+//     const view = new DataView(buf);
+//     view.setInt16(0, 1);
+//     console.log(new Int8Array(buf));
+//     const int16Array = new Int16Array(buf);
+//     return int16Array[0] === 256;
+// }
+
+// console.log(isLittleEndian());
+
+// function isLittleEndian() {
+//     const buf = new ArrayBuffer(2);
+//     const int16Array = new Int16Array(buf);
+//     int16Array[0] = 256;
+//     console.log(new Int8Array(buf));
+// }
+
+// console.log(isLittleEndian());
+
+// const buffer = new ArrayBuffer(8);
+// const int8Array = new Int8Array(buffer);
+// int8Array[0] = 30;
+// int8Array[1] = 41;
+
+// const dataView = new DataView(buffer);
+// dataView.setInt16(2, 256, true);
+
+// const int8Array2 = new Int8Array(buffer);
+// console.log(int8Array2);
+
+// const int16Array = new Int16Array(buffer);
+// console.log(int16Array); // [10526, 526, 0, 0]
+
+// int16Array[0] = 256;
+// const int8Array1 = new Int8Array(buffer);
+// console.log(int8Array1);
