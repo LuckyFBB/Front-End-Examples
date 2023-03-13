@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import { SingleFile } from "./singleFile";
 import { MultiFile } from "./multiFile";
+import { DirectoryFile } from "./directoryFile";
 import { Menu, Layout } from "antd";
 import "antd/dist/reset.css";
 import "./style.css";
@@ -16,6 +17,10 @@ const items = [
     {
         key: "multiFile",
         label: "MultiFile",
+    },
+    {
+        key: "directoryFile",
+        label: "DirectoryFile",
     },
 ];
 
@@ -43,12 +48,16 @@ const App = () => {
                     }}
                 />
             </Sider>
-            <Layout>
+            <Layout style={{ padding: 16 }}>
                 <Content>
                     <Routes>
                         <Route path="/" element={<SingleFile />} />
                         <Route path="/singleFile" element={<SingleFile />} />
                         <Route path="/multiFile" element={<MultiFile />} />
+                        <Route
+                            path="/directoryFile"
+                            element={<DirectoryFile />}
+                        />
                     </Routes>
                 </Content>
             </Layout>
