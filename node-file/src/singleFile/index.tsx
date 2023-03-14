@@ -2,7 +2,13 @@ import React, { useState } from "react";
 import { Upload, message, Button } from "antd";
 import type { UploadProps } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
-import { request } from "../http";
+import { PORT } from "../http";
+import axios from "axios";
+
+const request = axios.create({
+    baseURL: `http://localhost:${PORT}/`,
+    timeout: 60000,
+});
 
 export const SingleFile = () => {
     const [fileList, setFileList] = useState<any>([]);

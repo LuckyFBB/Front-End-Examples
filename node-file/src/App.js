@@ -3,6 +3,7 @@ import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import { SingleFile } from "./singleFile";
 import { MultiFile } from "./multiFile";
 import { DirectoryFile } from "./directoryFile";
+import { BigFile } from "./bigFile";
 import { Menu, Layout } from "antd";
 import "antd/dist/reset.css";
 import "./style.css";
@@ -21,6 +22,10 @@ const items = [
     {
         key: "directoryFile",
         label: "DirectoryFile",
+    },
+    {
+        key: "bigFile",
+        label: "BigFile",
     },
 ];
 
@@ -57,7 +62,8 @@ const App = () => {
                         <Route
                             path="/directoryFile"
                             element={<DirectoryFile />}
-                        />
+                        />{" "}
+                        <Route path="/bigFile" element={<BigFile />} />
                     </Routes>
                 </Content>
             </Layout>
