@@ -19,6 +19,7 @@ const storage = multer.diskStorage({
         cb(null, UPLOAD_DIR);
     },
     filename: function (req, file, cb) {
+        console.log("---filename",file)
         // 设置文件名
         cb(null, `${file.originalname}`);
     },
@@ -29,23 +30,23 @@ const multerUpload = multer({ storage });
 router.post(
     "/uploadBig",
     async (ctx, next) => {
+        console.log(ctx)
         try {
             await next();
-            console.log(ctx);
-            ctx.body = {
-                code: 1,
-                msg: "文件上传成功",
-                url: `${RESOURCE_URL}/${ctx.file.originalname}`,
-            };
+            // ctx.body = {
+            //     code: 1,
+            //     msg: "文件上传成功",
+            //     url: `${RESOURCE_URL}/${ctx.file.originalname}`,
+            // };
         } catch (error) {
-            console.log(error);
-            ctx.body = {
-                code: 0,
-                msg: "文件上传失败",
-            };
+            // console.log(error);
+            // ctx.body = {
+            //     code: 0,
+            //     msg: "文件上传失败",
+            // };
         }
     },
-    multerUpload.single("file")
+    multerUpload.fields([{ name: "slice" }])
 );
 
 // 注册中间件

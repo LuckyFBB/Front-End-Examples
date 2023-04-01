@@ -1,10 +1,9 @@
-// const axios = require("axios");
 
-const PORT = 8888;
+import axios from "axios";
 
-// const request = axios.create({
-//     baseURL: `http://localhost:${PORT}/`,
-//     timeout: 60000,
-// });
+export const PORT = 8888;
 
-module.exports = { PORT };
+export const request = axios.create({
+    baseURL: `http://localhost:${PORT}/`,
+    timeout: 60000,
+});
