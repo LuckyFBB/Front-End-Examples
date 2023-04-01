@@ -4,6 +4,7 @@ const serve = require("koa-static");
 const cors = require("@koa/cors");
 const multer = require("@koa/multer");
 const Router = require("@koa/router");
+const bodyParser = require("koa-bodyparser");
 
 const app = new Koa();
 const router = new Router();
@@ -18,32 +19,33 @@ const storage = multer.diskStorage({
         // 设置文件的存储目录
         cb(null, UPLOAD_DIR);
     },
-    filename: function (req, file, cb) {
-        console.log("---filename",file)
+    filename: async function (req, file, cb) {
         // 设置文件名
-        cb(null, `${file.originalname}`);
+        cb(null, `${file?.originalname}`);
     },
 });
+
+app.use(bodyParser()); // 获取 formData 中除了文件别的信息
 
 const multerUpload = multer({ storage });
 
 router.post(
     "/uploadBig",
     async (ctx, next) => {
-        console.log(ctx)
         try {
             await next();
-            // ctx.body = {
-            //     code: 1,
-            //     msg: "文件上传成功",
-            //     url: `${RESOURCE_URL}/${ctx.file.originalname}`,
-            // };
+            // const formData = ctx.request.body; // 获取 formData 中其他数据
+            const slice = ctx.files.slice[0]; // 切片文件
+            ctx.body = {
+                code: 1,
+                msg: "文件上传成功",
+                url: `${RESOURCE_URL}/${slice.originalname}`,
+            };
         } catch (error) {
-            // console.log(error);
-            // ctx.body = {
-            //     code: 0,
-            //     msg: "文件上传失败",
-            // };
+            ctx.body = {
+                code: 0,
+                msg: "文件上传失败",
+            };
         }
     },
     multerUpload.fields([{ name: "slice" }])
