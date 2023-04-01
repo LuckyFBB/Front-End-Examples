@@ -1,14 +1,8 @@
 import { UploadOutlined } from "@ant-design/icons";
 import { Button, Upload, UploadProps } from "antd";
 import React, { useState } from "react";
-import { PORT } from "../http";
-import axios from "axios";
+import { request } from "../http";
 import { RcFile } from "antd/es/upload";
-
-const request = axios.create({
-    baseURL: `http://localhost:${PORT}/`,
-    timeout: 60000,
-});
 
 const BIG_FILE_SIZE = 25 * 1024 * 1024;
 const SLICE_FILE_SIZE = 5 * 1024 * 1024;
@@ -65,7 +59,7 @@ export const BigFile = () => {
                 formData.set("file", slice);
                 return { formData, index, sliceName };
             })
-            .forEach(({ formData }: any) => {
+            .map(({ formData }: any) => 
                 request.post("/uploadBig", formData, {
                     // 监听上传进度
                     onUploadProgress: function (progressEvent: any) {
@@ -74,8 +68,8 @@ export const BigFile = () => {
                         );
                         console.log(percentCompleted);
                     },
-                });
-            });
+                })
+            );
         await Promise.all(requestList);
     };
 
