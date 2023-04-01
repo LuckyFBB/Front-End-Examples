@@ -40,7 +40,10 @@ export const BigFile = () => {
         let index = 0;
         while (curSize < file.size) {
             sliceList.push({
-                slice: file.slice(curSize, (curSize += SLICE_FILE_SIZE)),
+                slice: new File(
+                    [file.slice(curSize, (curSize += SLICE_FILE_SIZE))],
+                    `${file.name}-${index}`
+                ),
                 name: file.name,
                 sliceName: `${file.name}-${index}`,
             });
@@ -56,10 +59,9 @@ export const BigFile = () => {
                 formData.append("slice", slice);
                 formData.append("sliceName", sliceName);
                 formData.append("name", name);
-                formData.set("file", slice);
                 return { formData, index, sliceName };
             })
-            .map(({ formData }: any) => 
+            .map(({ formData }: any) =>
                 request.post("/uploadBig", formData, {
                     // 监听上传进度
                     onUploadProgress: function (progressEvent: any) {
