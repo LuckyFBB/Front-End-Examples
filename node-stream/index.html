@@ -1,0 +1,2193 @@
+<!DOCTYPE html>
+<!-- saved from url=(0084)https://www.nodejs.red/#/nodejs/buffer?id=buffer%e5%ba%94%e7%94%a8%e5%9c%ba%e6%99%af -->
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+        <title>[Buffer] 缓冲区模块</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+        <meta name="description" content="Description" />
+        <meta
+            name="viewport"
+            content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+        />
+        <link rel="stylesheet" href="./[Buffer] 缓冲区模块_files/vue.css" />
+        <link rel="stylesheet" href="./[Buffer] 缓冲区模块_files/gitalk.css" />
+        <script src="./[Buffer] 缓冲区模块_files/hm.js"></script>
+        <script>
+            var _hmt = _hmt || [];
+            (function () {
+                var hm = document.createElement("script");
+                hm.src =
+                    "https://hm.baidu.com/hm.js?f5bd120e1d351a666dc307fbf05e38d2";
+                var s = document.getElementsByTagName("script")[0];
+                s.parentNode.insertBefore(hm, s);
+            })();
+        </script>
+        <style type="text/css">
+            .docsify-pagination-container {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: space-between;
+                overflow: hidden;
+                margin: 5em 0 1em;
+                border-top: 1px solid rgba(0, 0, 0, 0.07);
+            }
+            .pagination-item {
+                margin-top: 2.5em;
+            }
+            .pagination-item a,
+            .pagination-item a:hover {
+                text-decoration: none;
+            }
+            .pagination-item a {
+                color: currentColor;
+            }
+            .pagination-item a:hover .pagination-item-title {
+                text-decoration: underline;
+            }
+            .pagination-item:not(:last-child) a .pagination-item-label,
+            .pagination-item:not(:last-child) a .pagination-item-subtitle,
+            .pagination-item:not(:last-child) a .pagination-item-title {
+                opacity: 0.3;
+                transition: all 0.2s;
+            }
+            .pagination-item:last-child .pagination-item-label,
+            .pagination-item:not(:last-child) a:hover .pagination-item-label {
+                opacity: 0.6;
+            }
+            .pagination-item:not(:last-child) a:hover .pagination-item-title {
+                opacity: 1;
+            }
+            .pagination-item-label {
+                font-size: 0.8em;
+            }
+            .pagination-item-label > * {
+                line-height: 1;
+                vertical-align: middle;
+            }
+            .pagination-item-label svg {
+                height: 0.8em;
+                width: auto;
+                stroke: currentColor;
+                stroke-linecap: round;
+                stroke-linejoin: round;
+                stroke-width: 1px;
+            }
+            .pagination-item--next {
+                margin-left: auto;
+                text-align: right;
+            }
+            .pagination-item--next svg {
+                margin-left: 0.5em;
+            }
+            .pagination-item--previous svg {
+                margin-right: 0.5em;
+            }
+            .pagination-item-title {
+                font-size: 1.6em;
+            }
+            .pagination-item-subtitle {
+                text-transform: uppercase;
+                opacity: 0.3;
+            }
+        </style>
+        <style type="text/css">
+            .medium-zoom-overlay {
+                position: fixed;
+                top: 0;
+                right: 0;
+                bottom: 0;
+                left: 0;
+                opacity: 0;
+                transition: opacity 0.3s;
+                will-change: opacity;
+            }
+            .medium-zoom--opened .medium-zoom-overlay {
+                cursor: pointer;
+                cursor: zoom-out;
+                opacity: 1;
+            }
+            .medium-zoom-image {
+                cursor: pointer;
+                cursor: zoom-in;
+                transition: transform 0.3s cubic-bezier(0.2, 0, 0.2, 1) !important;
+            }
+            .medium-zoom-image--hidden {
+                visibility: hidden;
+            }
+            .medium-zoom-image--opened {
+                position: relative;
+                cursor: pointer;
+                cursor: zoom-out;
+                will-change: transform;
+            }
+        </style>
+    </head>
+    <body data-page="nodejs/buffer.md" class="ready sticky">
+        <a
+            href="https://github.com/Q-Angelo/Nodejs-Roadmap"
+            target="_blank"
+            class="github-corner"
+            aria-label="View source on Github"
+            ><svg viewBox="0 0 250 250" aria-hidden="true">
+                <path
+                    d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"
+                ></path>
+                <path
+                    d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+                    fill="currentColor"
+                    style="transform-origin: 130px 106px"
+                    class="octo-arm"
+                ></path>
+                <path
+                    d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+                    fill="currentColor"
+                    class="octo-body"
+                ></path></svg
+        ></a>
+        <section
+            class="cover"
+            style="
+                background: linear-gradient(
+                    to left bottom,
+                    hsl(174, 100%, 85%) 0%,
+                    hsl(151, 100%, 85%) 100%
+                );
+            "
+        >
+            <div class="mask"></div>
+            <div class="cover-main"><!--cover--></div>
+        </section>
+        <main>
+            <button class="sidebar-toggle" aria-label="Menu">
+                <div class="sidebar-toggle-button">
+                    <span></span><span></span><span></span>
+                </div>
+            </button>
+            <aside class="sidebar">
+                <h1 class="app-name">
+                    <a
+                        class="app-name-link"
+                        data-nosearch=""
+                        href="https://www.nodejs.red/"
+                        >《Nodejs技术栈》</a
+                    >
+                </h1>
+                <div class="sidebar-nav">
+                    <ul>
+                        <li>
+                            <p>Introduction</p>
+                            <ul>
+                                <li>
+                                    <a
+                                        href="https://www.nodejs.red/#/README"
+                                        title="简介"
+                                        >简介</a
+                                    >
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <p>基础入门</p>
+                            <ul>
+                                <li>
+                                    <a
+                                        href="https://www.nodejs.red/#/nodejs/base/what-is-nodejs"
+                                        title="Node.js 是什么？我为什么选择它？"
+                                        >Node.js 是什么？我为什么选择它？</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="https://www.nodejs.red/#/nodejs/base/release"
+                                        title="Node.js 版本知多少？又该如何选择？"
+                                        >Node.js 版本知多少？又该如何选择？</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="https://www.nodejs.red/#/nodejs/base/install"
+                                        title="“3N 兄弟” 助您完成 Node.js 环境搭建"
+                                        >“3N 兄弟” 助您完成 Node.js 环境搭建</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="https://www.nodejs.red/#/nodejs/base/npm"
+                                        title="Node.js 包管理器 NPM"
+                                        >Node.js 包管理器 NPM</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="https://www.nodejs.red/#/nodejs/base/debug-nodejs-with-chrome-devtools"
+                                        title="使用 Chrome Devtools 来调试你的 Node.js 程序"
+                                        >使用 Chrome Devtools 来调试你的 Node.js
+                                        程序</a
+                                    >
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <p>系统模块</p>
+                            <ul>
+                                <li>
+                                    <a
+                                        href="https://www.nodejs.red/#/nodejs/module"
+                                        title="[Module] CommonJS 模块机制"
+                                        ><code>[Module]</code> CommonJS
+                                        模块机制</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="https://www.nodejs.red/#/nodejs/modules/esm"
+                                        title="[Module] ES Modules 入门基础"
+                                        ><code>[Module]</code> ES Modules
+                                        入门基础</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="https://www.nodejs.red/#/nodejs/events"
+                                        title="[Events] 事件触发器"
+                                        ><code>[Events]</code> 事件触发器</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="https://www.nodejs.red/#/nodejs/crypto"
+                                        title="[Crypto] 加解密模块"
+                                        ><code>[Crypto]</code> 加解密模块</a
+                                    >
+                                </li>
+                                <li class="">
+                                    <a
+                                        href="https://www.nodejs.red/#/nodejs/buffer"
+                                        title="[Buffer] 缓冲区模块"
+                                        ><code>[Buffer]</code> 缓冲区模块</a
+                                    >
+                                    <ul class="app-sub-sidebar">
+                                        <li class="active">
+                                            <a
+                                                class="section-link"
+                                                href="https://www.nodejs.red/#/nodejs/buffer?id=%e5%bf%ab%e9%80%9f%e5%af%bc%e8%88%aa"
+                                                title="快速导航"
+                                                >快速导航</a
+                                            >
+                                        </li>
+                                        <li class="">
+                                            <a
+                                                class="section-link"
+                                                href="https://www.nodejs.red/#/nodejs/buffer?id=%e9%9d%a2%e8%af%95%e6%8c%87%e5%8d%97"
+                                                title="面试指南"
+                                                >面试指南</a
+                                            >
+                                        </li>
+                                        <li class="">
+                                            <a
+                                                class="section-link"
+                                                href="https://www.nodejs.red/#/nodejs/buffer?id=buffer%e5%88%9d%e8%af%86"
+                                                title="Buffer初识"
+                                                >Buffer初识</a
+                                            >
+                                        </li>
+                                        <li class="">
+                                            <a
+                                                class="section-link"
+                                                href="https://www.nodejs.red/#/nodejs/buffer?id=buffer%e5%9f%ba%e6%9c%ac%e4%bd%bf%e7%94%a8"
+                                                title="Buffer基本使用"
+                                                >Buffer基本使用</a
+                                            >
+                                        </li>
+                                        <li class="">
+                                            <a
+                                                class="section-link"
+                                                href="https://www.nodejs.red/#/nodejs/buffer?id=buffer%e5%86%85%e5%ad%98%e6%9c%ba%e5%88%b6"
+                                                title="Buffer内存机制"
+                                                >Buffer内存机制</a
+                                            >
+                                        </li>
+                                        <li class="">
+                                            <a
+                                                class="section-link"
+                                                href="https://www.nodejs.red/#/nodejs/buffer?id=buffer%e5%ba%94%e7%94%a8%e5%9c%ba%e6%99%af"
+                                                title="Buffer应用场景"
+                                                >Buffer应用场景</a
+                                            >
+                                        </li>
+                                        <li class="">
+                                            <a
+                                                class="section-link"
+                                                href="https://www.nodejs.red/#/nodejs/buffer?id=buffer-vs-cache"
+                                                title="Buffer VS Cache"
+                                                >Buffer VS Cache</a
+                                            >
+                                        </li>
+                                        <li class="">
+                                            <a
+                                                class="section-link"
+                                                href="https://www.nodejs.red/#/nodejs/buffer?id=buffer-vs-string"
+                                                title="Buffer VS String"
+                                                >Buffer VS String</a
+                                            >
+                                        </li>
+                                        <li>
+                                            <a
+                                                class="section-link"
+                                                href="https://www.nodejs.red/#/nodejs/buffer?id=reference"
+                                                title="Reference"
+                                                >Reference</a
+                                            >
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a
+                                        href="https://www.nodejs.red/#/nodejs/process-threads"
+                                        title="[Process] 线程和进程"
+                                        ><code>[Process]</code> 线程和进程</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="https://www.nodejs.red/#/nodejs/console"
+                                        title="[Console] 日志模块"
+                                        ><code>[Console]</code> 日志模块</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="https://www.nodejs.red/#/nodejs/net"
+                                        title="[Net] 网络模块"
+                                        ><code>[Net]</code> 网络模块</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="https://www.nodejs.red/#/nodejs/dns"
+                                        title="[DNS] 域名解析"
+                                        ><code>[DNS]</code> 域名解析</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="https://www.nodejs.red/#/nodejs/cluster-base"
+                                        title="[Cluster] 集群模块"
+                                        ><code>[Cluster]</code> 集群模块</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="https://www.nodejs.red/#/nodejs/modules/stream-mutil-file-merge"
+                                        title="[Stream] 多文件合并实现"
+                                        ><code>[Stream]</code> 多文件合并实现</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="https://www.nodejs.red/#/nodejs/modules/stream-pipe"
+                                        title="[Stream] pipe 基本使用与实现分析"
+                                        ><code>[Stream]</code> pipe
+                                        基本使用与实现分析</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="https://www.nodejs.red/#/nodejs/modules/stream-lib-internal-stremas-legacy"
+                                        title="[Stream] internal/stremas/egacy.js 文件分析"
+                                        ><code>[Stream]</code>
+                                        internal/stremas/egacy.js 文件分析</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="https://www.nodejs.red/#/nodejs/modules/util-promisify"
+                                        title="[Util] util.promisify 实现原理分析"
+                                        ><code>[Util]</code> util.promisify
+                                        实现原理分析</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="https://www.nodejs.red/#/nodejs/modules/fs-file-exists-check"
+                                        title="[FileSystem] 如何在 Node.js 中判断一个文件/文件夹是否存在？"
+                                        ><code>[FileSystem]</code> 如何在
+                                        Node.js
+                                        中判断一个文件/文件夹是否存在？</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="https://www.nodejs.red/#/nodejs/modules/report"
+                                        title="[Report] 在 Node.js 中使用诊断报告快速追踪问题"
+                                        ><code>[Report]</code> 在 Node.js
+                                        中使用诊断报告快速追踪问题</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="https://www.nodejs.red/#/nodejs/modules/async-hooks"
+                                        title="[AsyncHooks] 使用 Async Hooks 模块追踪异步资源"
+                                        ><code>[AsyncHooks]</code> 使用 Async
+                                        Hooks 模块追踪异步资源</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="https://www.nodejs.red/#/nodejs/modules/http-set-cookies"
+                                        title="[HTTP] HTTP 请求与响应如何设置 Cookie 信息"
+                                        ><code>[HTTP]</code> HTTP
+                                        请求与响应如何设置 Cookie 信息</a
+                                    >
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <p>NPM 模块</p>
+                            <ul>
+                                <li>
+                                    <a
+                                        href="https://www.nodejs.red/#/nodejs/npm/private-chat-socketio"
+                                        title="Node.js + Socket.io 实现一对一即时聊天"
+                                        >Node.js + Socket.io
+                                        实现一对一即时聊天</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="https://www.nodejs.red/#/nodejs/npm/undici"
+                                        title="request 已废弃 - 推荐 Node.js HTTP Client undici"
+                                        >request 已废弃 - 推荐 Node.js HTTP
+                                        Client undici</a
+                                    >
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <p>高级进阶</p>
+                            <ul>
+                                <li>
+                                    <a
+                                        href="https://www.nodejs.red/#/nodejs/logger"
+                                        title="Egg-Logger 模块实践"
+                                        >Egg-Logger 模块实践</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="https://www.nodejs.red/#/nodejs/IO"
+                                        title="I/O 模型浅谈"
+                                        >I/O 模型浅谈</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="https://www.nodejs.red/#/nodejs/memory"
+                                        title="Memory 内存管理和 V8 垃圾回收机制"
+                                        >Memory 内存管理和 V8 垃圾回收机制</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="https://www.nodejs.red/#/nodejs/cache?id=%e7%bc%93%e5%ad%98"
+                                        title="Cache 缓存"
+                                        >Cache 缓存</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="https://www.nodejs.red/#/nodejs/schedule?id=%e5%ae%9a%e6%97%b6%e4%bb%bb%e5%8a%a1"
+                                        title="Schedule 定时任务"
+                                        >Schedule 定时任务</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="https://www.nodejs.red/#/nodejs/template?id=%e6%a8%a1%e6%9d%bf%e5%bc%95%e6%93%8e"
+                                        title="Template 模板引擎"
+                                        >Template 模板引擎</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="https://www.nodejs.red/#/nodejs/test"
+                                        title="Testing 测试"
+                                        >Testing 测试</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="https://www.nodejs.red/#/nodejs/framework?id=%e6%a1%86%e6%9e%b6"
+                                        title="Framework Web 开发框架选型"
+                                        >Framework Web 开发框架选型</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="https://www.nodejs.red/#/nodejs/orm?id=orm"
+                                        title="ORM 对象关系映射"
+                                        >ORM 对象关系映射</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="https://www.nodejs.red/#/nodejs/middleware"
+                                        title="Middleware 常用 Web 框架&amp;中间件汇总"
+                                        >Middleware 常用 Web
+                                        框架&amp;中间件汇总</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="https://www.nodejs.red/#/nodejs/modules/os-cpu-usage"
+                                        title="深入 Nodejs 源码探究 CPU 信息的获取与实时计算"
+                                        >深入 Nodejs 源码探究 CPU
+                                        信息的获取与实时计算</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="https://www.nodejs.red/#/nodejs/advanced/uncaugh-exception"
+                                        title="Node.js 中出现未捕获异常如何处理？"
+                                        >Node.js 中出现未捕获异常如何处理？</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="https://www.nodejs.red/#/nodejs/advanced/asynciterator-in-nodejs"
+                                        title="探索异步迭代器在 Node.js 中的使用"
+                                        >探索异步迭代器在 Node.js 中的使用</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="https://www.nodejs.red/#/nodejs/base/express-vs-koa"
+                                        title="多维度分析 Express、Koa 之间的区别"
+                                        >多维度分析 Express、Koa 之间的区别</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="https://www.nodejs.red/#/nodejs/advanced/json-stream"
+                                        title="在 Node.js 中如何处理一个大型 JSON 文件？"
+                                        >在 Node.js 中如何处理一个大型 JSON
+                                        文件？</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="https://www.nodejs.red/#/nodejs/advanced/floating-point-number-float-bigint-question"
+                                        title="Node.js 中遇到大数处理精度丢失如何解决？前端也适用！"
+                                        >Node.js
+                                        中遇到大数处理精度丢失如何解决？前端也适用！</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="https://www.nodejs.red/#/nodejs/advanced/stream-object-mode-and-flow-mode"
+                                        title="Stream 的两种模式"
+                                        >Stream 的两种模式</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="https://www.nodejs.red/#/nodejs/advanced/stream-back-pressure"
+                                        title="Stream 的背压问题 — 消费端数据积压来不及处理会怎么样？"
+                                        >Stream 的背压问题 —
+                                        消费端数据积压来不及处理会怎么样？</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="https://www.nodejs.red/#/nodejs/advanced/stream-copy"
+                                        title="结合异步迭代器实现 Node.js 流式数据复制"
+                                        >结合异步迭代器实现 Node.js
+                                        流式数据复制</a
+                                    >
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <p>好文翻译</p>
+                            <ul>
+                                <li>
+                                    <a
+                                        href="https://www.nodejs.red/#/nodejs/translate/everything-you-need-to-know-about-node-js-lnc"
+                                        title="你需要了解的有关 Node.js 的所有信息"
+                                        >你需要了解的有关 Node.js 的所有信息</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="https://www.nodejs.red/#/nodejs/translate/bulletproof-node.js-project-architecture"
+                                        title="不容错过的 Node.js 项目架构"
+                                        >不容错过的 Node.js 项目架构</a
+                                    >
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <p>实践指南</p>
+                            <ul>
+                                <li>
+                                    <a
+                                        href="https://www.nodejs.red/#/nodejs/practice/enterprise"
+                                        title="企业实践"
+                                        >企业实践</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="https://www.nodejs.red/#/nodejs/practice/frame"
+                                        title="框架实践"
+                                        >框架实践</a
+                                    >
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <p>数据库</p>
+                            <ul>
+                                <li>
+                                    <a
+                                        href="https://www.nodejs.red/#/database/redis-lua"
+                                        title="[Redis] Node.js 中实践 Redis Lua 脚本"
+                                        ><code>[Redis]</code> Node.js 中实践
+                                        Redis Lua 脚本</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="https://www.nodejs.red/#/database/redis-lock"
+                                        title="[Redis] Node.js 中实践 Redis 分布式锁"
+                                        ><code>[Redis]</code> Node.js 中实践
+                                        Redis 分布式锁</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="https://www.nodejs.red/#/database/mongodb-transactions"
+                                        title="[MongoDB] 事务 | 基础篇"
+                                        ><code>[MongoDB]</code> 事务 | 基础篇</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="https://www.nodejs.red/#/database/mongodb-transactions-pratice"
+                                        title="[MongoDB] 事务 | 多文档事务实践篇"
+                                        ><code>[MongoDB]</code> 事务 |
+                                        多文档事务实践篇</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="https://www.nodejs.red/#/database/mongoose-populate"
+                                        title="[MongoDB] Node.js 中用 Mongoose 关联查询踩坑记录"
+                                        ><code>[MongoDB]</code> Node.js 中用
+                                        Mongoose 关联查询踩坑记录</a
+                                    >
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <p>微服务</p>
+                            <ul>
+                                <li>
+                                    <a
+                                        href="https://www.nodejs.red/#/microservice/data-communication"
+                                        title="[Microservice] 数据通信方式 RPC、HTTP、消息队列"
+                                        ><code>[Microservice]</code>
+                                        数据通信方式 RPC、HTTP、消息队列</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="https://www.nodejs.red/#/microservice/consul"
+                                        title="[Consul] 服务注册与发现 Consul"
+                                        ><code>[Consul]</code> 服务注册与发现
+                                        Consul</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="https://www.nodejs.red/#/microservice/rabbitmq-base"
+                                        title="[RabbitMQ] 入门篇"
+                                        ><code>[RabbitMQ]</code> 入门篇</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="https://www.nodejs.red/#/microservice/rabbitmq-exchange"
+                                        title="[RabbitMQ] 交换机消息投递机制"
+                                        ><code>[RabbitMQ]</code>
+                                        交换机消息投递机制</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="https://www.nodejs.red/#/microservice/rabbitmq-schedule"
+                                        title="[RabbitMQ] DLX（死信队列）+ TTL 实现延迟队列"
+                                        ><code>[RabbitMQ]</code>
+                                        DLX（死信队列）+ TTL 实现延迟队列</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="https://www.nodejs.red/#/microservice/rabbitmq-delayed-message-exchange"
+                                        title="[RabbitMQ] Delayed Message 插件实现延迟队列"
+                                        ><code>[RabbitMQ]</code> Delayed Message
+                                        插件实现延迟队列</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="https://www.nodejs.red/#/microservice/rabbitmq-prefetch"
+                                        title="[RabbitMQ] 高并发下消费端限流实践"
+                                        ><code>[RabbitMQ]</code>
+                                        高并发下消费端限流实践</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="https://www.nodejs.red/#/microservice/rabbitmq-reconnecting"
+                                        title="[RabbitMQ] 服务异常重连"
+                                        ><code>[RabbitMQ]</code> 服务异常重连</a
+                                    >
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <p>Node.js 小知识</p>
+                            <ul>
+                                <li>
+                                    <a
+                                        href="https://www.nodejs.red/#/"
+                                        title="HTTP 请求与响应如何设置 Cookie 信息"
+                                        >HTTP 请求与响应如何设置 Cookie 信息</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="https://www.nodejs.red/#/nodejs/tips/sleep"
+                                        title="如何实现线程睡眠？"
+                                        >如何实现线程睡眠？</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="https://www.nodejs.red/#/nodejs/tips/upload-picture"
+                                        title="实现图片上传写入磁盘的接口"
+                                        >实现图片上传写入磁盘的接口</a
+                                    >
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <p>Node.js News</p>
+                            <ul>
+                                <li>
+                                    <a
+                                        href="https://www.nodejs.red/#/nodejs/version/node-v14-feature"
+                                        title="一起来看看 Node.js v14.x LTS 中的这些新功能"
+                                        >一起来看看 Node.js v14.x LTS
+                                        中的这些新功能</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="https://www.nodejs.red/#/"
+                                        title="Node.js v15.x 新特性 — 控制器对象 AbortController"
+                                        >Node.js v15.x 新特性 — 控制器对象
+                                        AbortController</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="https://www.nodejs.red/#/"
+                                        title="Node.js 16 来了，14 将支持到 2023 年"
+                                        >Node.js 16 来了，14 将支持到 2023 年</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="https://www.nodejs.red/#/nodejs/version/node-v14-feature"
+                                        title="一起来看看 Node.js v14.x LTS 中的这些新功能"
+                                        >一起来看看 Node.js v14.x LTS
+                                        中的这些新功能</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="https://www.nodejs.red/#/nodejs/version/node-v14.15.0-lts-intro"
+                                        title="Node.js v14.15.0 已发布进入 LTS 长期支持"
+                                        >Node.js v14.15.0 已发布进入 LTS
+                                        长期支持</a
+                                    >
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <p>Serverless</p>
+                            <ul>
+                                <li>
+                                    <a
+                                        href="https://www.nodejs.red/#/serverless/serverless-functions-using-node-and-aws"
+                                        title="Node.js 快速开启 Serverless Functions：入门实践指南"
+                                        >Node.js 快速开启 Serverless
+                                        Functions：入门实践指南</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="https://github.com/qufei1993/aws-node-rest-api-typescript/blob/master/intro-zh.md"
+                                        target="_blank"
+                                        rel="noopener"
+                                        title="TypeScript + Serverless 开发 REST API 实战"
+                                        >TypeScript + Serverless 开发 REST API
+                                        实战</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="https://www.nodejs.red/#/serverless/node-mongodb-altas-serverless-api"
+                                        title="使用 Serverless, Nodejs, MongoDB Atlas cloud 构建 REST API"
+                                        >使用 Serverless, Nodejs, MongoDB Atlas
+                                        cloud 构建 REST API</a
+                                    >
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <p>DevOps</p>
+                            <ul>
+                                <li>
+                                    <a
+                                        href="https://www.nodejs.red/#/devops/docker-base"
+                                        title="[Docker] 入门到实践"
+                                        ><code>[Docker]</code> 入门到实践</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="https://www.nodejs.red/#/devops/docker-nodejs"
+                                        title="[Docker] Node.js 服务容器化实践"
+                                        ><code>[Docker]</code> Node.js
+                                        服务容器化实践</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="https://www.nodejs.red/#/devops/docker-build-nodejs-smooth-program"
+                                        title="[Docker] Node.js 进程的优雅退出"
+                                        ><code>[Docker]</code> Node.js
+                                        进程的优雅退出</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="https://www.nodejs.red/#/devops/npm-deploy"
+                                        title="[NPM] 学会发布一个自己公共/私有包"
+                                        ><code>[NPM]</code>
+                                        学会发布一个自己公共/私有包</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="https://www.nodejs.red/#/devops/node-deploy"
+                                        title="[Deploy] Node.js 生产环境完整部署指南"
+                                        ><code>[Deploy]</code> Node.js
+                                        生产环境完整部署指南</a
+                                    >
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <ul>
+                        <li>
+                            <p>其他</p>
+                            <ul>
+                                <li>
+                                    <a
+                                        href="https://www.nodejs.red/#/other/2020-noderoadmap-original-compilation"
+                                        title="2020 Nodejs技术栈原创文章合辑"
+                                        >2020 Nodejs技术栈原创文章合辑</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="https://www.nodejs.red/#/other/may-2020-review"
+                                        title="2020 年度回顾 — 缘起「Nodejs技术栈」"
+                                        >2020 年度回顾 — 缘起「Nodejs技术栈」</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="https://www.nodejs.red/#/other/blog"
+                                        title="Blog 推荐"
+                                        >Blog 推荐</a
+                                    >
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </aside>
+            <section class="content">
+                <article class="markdown-section" id="main">
+                    <h1 id="nodejs-中的缓冲区（buffer）究竟是什么？">
+                        <a
+                            href="https://www.nodejs.red/#/nodejs/buffer?id=nodejs-%e4%b8%ad%e7%9a%84%e7%bc%93%e5%86%b2%e5%8c%ba%ef%bc%88buffer%ef%bc%89%e7%a9%b6%e7%ab%9f%e6%98%af%e4%bb%80%e4%b9%88%ef%bc%9f"
+                            data-id="nodejs-中的缓冲区（buffer）究竟是什么？"
+                            class="anchor"
+                            ><span
+                                >Node.js 中的缓冲区（Buffer）究竟是什么？</span
+                            ></a
+                        >
+                    </h1>
+                    <p>
+                        <img
+                            src="./[Buffer] 缓冲区模块_files/buffer_photo.jpg"
+                            data-origin="./img/buffer_photo.jpg"
+                            alt=""
+                            class="medium-zoom-image"
+                        />
+                    </p>
+                    <blockquote>
+                        <p>
+                            多数人都拥有自己不了解的能力和机会，都有可能做到未曾梦想的事情。
+                            ——戴尔·卡耐基
+                        </p>
+                    </blockquote>
+                    <p>
+                        从前端转入 Node.js
+                        的童鞋对这一部分内容会比较陌生，因为在前端中一些简单的字符串操作已经满足基本的业务需求，有时可能也会觉得
+                        Buffer、Stream
+                        这些会很神秘。回到服务端，如果你不想只做一名普通的
+                        Node.js 开发工程师，你应该深入去学习一下 Buffer
+                        揭开这一层神秘的面纱，同时也会让你对 Node.js
+                        的理解提升一个水平。
+                    </p>
+                    <h2 id="快速导航">
+                        <a
+                            href="https://www.nodejs.red/#/nodejs/buffer?id=%e5%bf%ab%e9%80%9f%e5%af%bc%e8%88%aa"
+                            data-id="快速导航"
+                            class="anchor"
+                            ><span>快速导航</span></a
+                        >
+                    </h2>
+                    <ul>
+                        <li>
+                            <a
+                                href="https://www.nodejs.red/#/nodejs/buffer?id=buffer%e5%88%9d%e8%af%86"
+                                >Buffer 初识</a
+                            >
+                            <ul>
+                                <li>什么是二进制数据？</li>
+                                <li>什么是 Stream？</li>
+                                <li>什么是 Buffer？</li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a
+                                href="https://www.nodejs.red/#/nodejs/buffer?id=buffer%e5%9f%ba%e6%9c%ac%e4%bd%bf%e7%94%a8"
+                                >Buffer 基本使用</a
+                            >
+                            <ul>
+                                <li>创建 Buffer</li>
+                                <li>Buffer 字符编码</li>
+                                <li>字符串与 Buffer 类型互转</li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a
+                                href="https://www.nodejs.red/#/nodejs/buffer?id=buffer%e5%86%85%e5%ad%98%e6%9c%ba%e5%88%b6"
+                                >Buffer 内存机制</a
+                            >
+                            <ul>
+                                <li>Buffer 内存分配原理</li>
+                                <li>8KB 限制</li>
+                                <li>透过 buffer.js 源码了解 Buffer 对象分配</li>
+                                <li>Buffer 内存分配总结</li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a
+                                href="https://www.nodejs.red/#/nodejs/buffer?id=buffer%e5%ba%94%e7%94%a8%e5%9c%ba%e6%99%af"
+                                >Buffer 应用场景</a
+                            >
+                            <ul>
+                                <li>I/O 操作</li>
+                                <li>zlib.js</li>
+                                <li>加解密</li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a
+                                href="https://www.nodejs.red/#/nodejs/buffer?id=buffer-vs-cache"
+                                >Buffer VS Cache</a
+                            >
+                        </li>
+                        <li>
+                            <a
+                                href="https://www.nodejs.red/#/nodejs/buffer?id=buffer-vs-string"
+                                >Buffer VS String</a
+                            >
+                        </li>
+                    </ul>
+                    <h2 id="面试指南">
+                        <a
+                            href="https://www.nodejs.red/#/nodejs/buffer?id=%e9%9d%a2%e8%af%95%e6%8c%87%e5%8d%97"
+                            data-id="面试指南"
+                            class="anchor"
+                            ><span>面试指南</span></a
+                        >
+                    </h2>
+                    <ul>
+                        <li>
+                            <code>缓冲（Buffer）与缓存（Cache）的区别？</code
+                            >，参考：<a
+                                href="https://www.nodejs.red/#/nodejs/buffer?id=buffer-vs-cache"
+                                >#</a
+                            >
+                        </li>
+                    </ul>
+                    <h2 id="buffer初识">
+                        <a
+                            href="https://www.nodejs.red/#/nodejs/buffer?id=buffer%e5%88%9d%e8%af%86"
+                            data-id="buffer初识"
+                            class="anchor"
+                            ><span>Buffer初识</span></a
+                        >
+                    </h2>
+                    <p>
+                        在引入 TypedArray 之前，JavaScript
+                        语言没有用于读取或操作二进制数据流的机制。 Buffer
+                        类是作为 Node.js API 的一部分引入的，用于在 TCP
+                        流、文件系统操作、以及其他上下文中与八位字节流进行交互。这是来自
+                        Node.js 官网的一段描述，比较晦涩难懂，总结起来一句话
+                        <strong
+                            >Node.js
+                            可以用来处理二进制流数据或者与之进行交互</strong
+                        >。
+                    </p>
+                    <p>
+                        Buffer 用于读取或操作二进制数据流，做为 Node.js API
+                        的一部分使用时无需
+                        require，用于操作网络协议、数据库、图片和文件 I/O
+                        等一些需要大量二进制数据的场景。Buffer
+                        在创建时大小已经被确定且是无法调整的，在内存分配这块
+                        Buffer 是由 C++ 层面提供而不是 V8 具体后面会讲解。
+                    </p>
+                    <p>
+                        在这里不知道你是否认为这是很简单的？但是上面提到的一些关键词<code>二进制</code>、<code>流（Stream）</code>、<code>缓冲区（Buffer）</code>，这些又都是什么呢？下面尝试做一些简单的介绍。
+                    </p>
+                    <h3 id="什么是二进制数据？">
+                        <a
+                            href="https://www.nodejs.red/#/nodejs/buffer?id=%e4%bb%80%e4%b9%88%e6%98%af%e4%ba%8c%e8%bf%9b%e5%88%b6%e6%95%b0%e6%8d%ae%ef%bc%9f"
+                            data-id="什么是二进制数据？"
+                            class="anchor"
+                            ><span>什么是二进制数据？</span></a
+                        >
+                    </h3>
+                    <p>
+                        谈到二进制我们大脑可能会浮想到就是 010101
+                        这种代码命令，如下图所示：
+                    </p>
+                    <p>
+                        <img
+                            src="./[Buffer] 缓冲区模块_files/010101.jpg"
+                            data-origin="./img/010101.jpg"
+                            alt=""
+                            class="medium-zoom-image"
+                        />
+                    </p>
+                    <p>
+                        正如上图所示，二进制数据使用 0 和 1
+                        两个数码来表示的数据，为了存储或展示一些数据，计算机需要先将这些数据转换为二进制来表示。例如，我想存储
+                        66 这个数字，计算机会先将数字 66 转化为二进制 01000010
+                        表示，印象中第一次接触这个是在大学期间 C
+                        语言课程中，转换公式如下所示：
+                    </p>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th align="center">128</th>
+                                <th align="center">64</th>
+                                <th align="center">32</th>
+                                <th align="center">16</th>
+                                <th align="center">8</th>
+                                <th align="center">4</th>
+                                <th align="center">2</th>
+                                <th align="center">1</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td align="center">0</td>
+                                <td align="center">1</td>
+                                <td align="center">0</td>
+                                <td align="center">0</td>
+                                <td align="center">0</td>
+                                <td align="center">0</td>
+                                <td align="center">1</td>
+                                <td align="center">0</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p>
+                        上面用数字举了一个示例，我们知道数字只是数据类型之一，其它的还有字符串、图像、文件等。例如我们对一个英文
+                        M 操作，在 JavaScript 里通过
+                        <code>'M'.charCodeAt()</code> 取到对应的 ASCII
+                        码之后（通过以上的步骤）会转为二进制表示。
+                    </p>
+                    <h3 id="什么是-stream？">
+                        <a
+                            href="https://www.nodejs.red/#/nodejs/buffer?id=%e4%bb%80%e4%b9%88%e6%98%af-stream%ef%bc%9f"
+                            data-id="什么是-stream？"
+                            class="anchor"
+                            ><span>什么是 Stream？</span></a
+                        >
+                    </h3>
+                    <p>
+                        流，英文 Stream
+                        是对输入输出设备的抽象，这里的设备可以是文件、网络、内存等。
+                    </p>
+                    <p>
+                        流是有方向性的，当程序从某个数据源读入数据，会开启一个输入流，这里的数据源可以是文件或者网络等，例如我们从
+                        a.txt
+                        文件读入数据。相反的当我们的程序需要写出数据到指定数据源（文件、网络等）时，则开启一个输出流。当有一些大文件操作时，我们就需要
+                        Stream 像管道一样，一点一点的将数据流出。
+                    </p>
+                    <p><strong>举个例子</strong></p>
+                    <p>
+                        我们现在有一大罐水需要浇一片菜地，如果我们将水罐的水一下全部倒入菜地，首先得需要有多么大的力气（这里的力气好比计算机中的硬件性能）才可搬得动。如果，我们拿来了水管将水一点一点流入我们的菜地，这个时候不要这么大力气就可完成。
+                    </p>
+                    <p>
+                        <img
+                            src="./[Buffer] 缓冲区模块_files/fountain_stream.jpg"
+                            data-origin="./img/fountain_stream.jpg"
+                            alt=""
+                            class="medium-zoom-image"
+                        />
+                    </p>
+                    <p>
+                        通过上面的讲解进一步的理解了 Stream 是什么？那么 Stream
+                        和 Buffer 之间又是什么关系呢？看以下介绍，关于 Stream
+                        本身也有很多知识点，欢迎关注公众号「Nodejs技术栈」，之后会单独进行介绍。
+                    </p>
+                    <h3 id="什么是-buffer？">
+                        <a
+                            href="https://www.nodejs.red/#/nodejs/buffer?id=%e4%bb%80%e4%b9%88%e6%98%af-buffer%ef%bc%9f"
+                            data-id="什么是-buffer？"
+                            class="anchor"
+                            ><span>什么是 Buffer？</span></a
+                        >
+                    </h3>
+                    <p>
+                        通过以上 Stream
+                        的讲解，我们已经看到数据是从一端流向另一端，那么他们是如何流动的呢？
+                    </p>
+                    <p>
+                        通常，数据的移动是为了处理或者读取它，并根据它进行决策。伴随着时间的推移，每一个过程都会有一个最小或最大数据量。如果数据到达的速度比进程消耗的速度快，那么少数早到达的数据会处于等待区等候被处理。反之，如果数据到达的速度比进程消耗的数据慢，那么早先到达的数据需要等待一定量的数据到达之后才能被处理。
+                    </p>
+                    <p>
+                        这里的等待区就指的缓冲区（Buffer），它是计算机中的一个小物理单位，通常位于计算机的
+                        RAM
+                        中。这些概念可能会很难理解，不要担心下面通过一个例子进一步说明。
+                    </p>
+                    <p><strong>公共汽车站乘车例子</strong></p>
+                    <p>
+                        举一个公共汽车站乘车的例子，通常公共汽车会每隔几十分钟一趟，在这个时间到达之前就算乘客已经满了，车辆也不会提前发车，早到的乘客就需要先在车站进行等待。假设到达的乘客过多，后到的一部分则需要在公共汽车站等待下一趟车驶来。
+                    </p>
+                    <p>
+                        <img
+                            src="./[Buffer] 缓冲区模块_files/bus-stop-1516549_1280.jpg"
+                            data-origin="./img/bus-stop-1516549_1280.jpg"
+                            alt=""
+                            class="medium-zoom-image"
+                        />
+                    </p>
+                    <p>
+                        在上面例子中的等待区公共汽车站，对应到我们的 Node.js
+                        中也就是缓冲区（Buffer），另外乘客到达的速度是我们不能控制的，我们能控制的也只有何时发车，对应到我们的程序中就是我们无法控制数据流到达的时间，可以做的是能决定何时发送数据。
+                    </p>
+                    <h2 id="buffer基本使用">
+                        <a
+                            href="https://www.nodejs.red/#/nodejs/buffer?id=buffer%e5%9f%ba%e6%9c%ac%e4%bd%bf%e7%94%a8"
+                            data-id="buffer基本使用"
+                            class="anchor"
+                            ><span>Buffer基本使用</span></a
+                        >
+                    </h2>
+                    <p>
+                        了解了 Buffer 的一些概念之后，我们来看下 Buffer
+                        的一些基本使用，这里并不会列举所有的 API
+                        使用，仅列举一部分常用的，更详细的可参考
+                        <a
+                            href="http://nodejs.cn/api/buffer.html"
+                            target="_blank"
+                            rel="noopener"
+                            >Node.js 中文网</a
+                        >。
+                    </p>
+                    <h3 id="创建buffer">
+                        <a
+                            href="https://www.nodejs.red/#/nodejs/buffer?id=%e5%88%9b%e5%bb%babuffer"
+                            data-id="创建buffer"
+                            class="anchor"
+                            ><span>创建Buffer</span></a
+                        >
+                    </h3>
+                    <p>
+                        在 6.0.0 之前的 Node.js 版本中， Buffer 实例是使用
+                        Buffer
+                        构造函数创建的，该函数根据提供的参数以不同方式分配返回的
+                        Buffer <code>new Buffer()</code>。
+                    </p>
+                    <p>
+                        现在可以通过 Buffer.from()、Buffer.alloc() 与
+                        Buffer.allocUnsafe() 三种方式来创建
+                    </p>
+                    <p><strong>Buffer.from()</strong></p>
+                    <pre
+                        v-pre=""
+                        data-lang="js"
+                    ><code class="lang-js"><span class="token keyword">const</span> b1 <span class="token operator">=</span> Buffer<span class="token punctuation">.</span><span class="token function">from</span><span class="token punctuation">(</span><span class="token string">'10'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> b2 <span class="token operator">=</span> Buffer<span class="token punctuation">.</span><span class="token function">from</span><span class="token punctuation">(</span><span class="token string">'10'</span><span class="token punctuation">,</span> <span class="token string">'utf8'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> b3 <span class="token operator">=</span> Buffer<span class="token punctuation">.</span><span class="token function">from</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token number">10</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> b4 <span class="token operator">=</span> Buffer<span class="token punctuation">.</span><span class="token function">from</span><span class="token punctuation">(</span>b3<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>b1<span class="token punctuation">,</span> b2<span class="token punctuation">,</span> b3<span class="token punctuation">,</span> b4<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// &lt;Buffer 31 30&gt; &lt;Buffer 31 30&gt; &lt;Buffer 0a&gt; &lt;Buffer 0a&gt;</span></code></pre>
+                    <p><strong>Buffer.alloc</strong></p>
+                    <p>
+                        返回一个已初始化的 Buffer，可以保证新创建的 Buffer
+                        永远不会包含旧数据。
+                    </p>
+                    <pre
+                        v-pre=""
+                        data-lang="js"
+                    ><code class="lang-js"><span class="token keyword">const</span> bAlloc1 <span class="token operator">=</span> Buffer<span class="token punctuation">.</span><span class="token function">alloc</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 创建一个大小为 10 个字节的缓冲区</span>
+
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>bAlloc1<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// &lt;Buffer 00 00 00 00 00 00 00 00 00 00&gt;</span></code></pre>
+                    <p><strong>Buffer.allocUnsafe</strong></p>
+                    <p>
+                        创建一个大小为 size 字节的新的未初始化的 Buffer，由于
+                        Buffer
+                        是未初始化的，因此分配的内存片段可能包含敏感的旧数据。在
+                        Buffer
+                        内容可读情况下，则可能会泄露它的旧数据，这个是不安全的，使用时要谨慎。
+                    </p>
+                    <pre
+                        v-pre=""
+                        data-lang="js"
+                    ><code class="lang-js"><span class="token keyword">const</span> bAllocUnsafe1 <span class="token operator">=</span> Buffer<span class="token punctuation">.</span><span class="token function">allocUnsafe</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>bAllocUnsafe1<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// &lt;Buffer 49 ae c9 cd 49 1d 00 00 11 4f&gt;</span></code></pre>
+                    <h3 id="buffer-字符编码">
+                        <a
+                            href="https://www.nodejs.red/#/nodejs/buffer?id=buffer-%e5%ad%97%e7%ac%a6%e7%bc%96%e7%a0%81"
+                            data-id="buffer-字符编码"
+                            class="anchor"
+                            ><span>Buffer 字符编码</span></a
+                        >
+                    </h3>
+                    <p>
+                        通过使用字符编码，可实现 Buffer 实例与 JavaScript
+                        字符串之间的相互转换，目前所支持的字符编码如下所示：
+                    </p>
+                    <ul>
+                        <li>
+                            'ascii' - 仅适用于 7 位 ASCII
+                            数据。此编码速度很快，如果设置则会剥离高位。
+                        </li>
+                        <li>
+                            'utf8' - 多字节编码的 Unicode
+                            字符。许多网页和其他文档格式都使用 UTF-8。
+                        </li>
+                        <li>
+                            'utf16le' - 2 或 4 个字节，小端序编码的 Unicode
+                            字符。支持代理对（U+10000 至 U+10FFFF）。
+                        </li>
+                        <li>'ucs2' - 'utf16le' 的别名。</li>
+                        <li>
+                            'base64' - Base64 编码。当从字符串创建 Buffer
+                            时，此编码也会正确地接受 RFC 4648 第 5 节中指定的
+                            “URL 和文件名安全字母”。
+                        </li>
+                        <li>
+                            'latin1' - 一种将 Buffer
+                            编码成单字节编码字符串的方法（由 RFC 1345 中的 IANA
+                            定义，第 63 页，作为 Latin-1 的补充块和 C0/C1
+                            控制码）。
+                        </li>
+                        <li>'binary' - 'latin1' 的别名。</li>
+                        <li>'hex' - 将每个字节编码成两个十六进制的字符。</li>
+                    </ul>
+                    <pre
+                        v-pre=""
+                        data-lang="js"
+                    ><code class="lang-js"><span class="token keyword">const</span> buf <span class="token operator">=</span> Buffer<span class="token punctuation">.</span><span class="token function">from</span><span class="token punctuation">(</span><span class="token string">'hello world'</span><span class="token punctuation">,</span> <span class="token string">'ascii'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>buf<span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token string">'hex'</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 68656c6c6f20776f726c64</span></code></pre>
+                    <h3 id="字符串与-buffer-类型互转">
+                        <a
+                            href="https://www.nodejs.red/#/nodejs/buffer?id=%e5%ad%97%e7%ac%a6%e4%b8%b2%e4%b8%8e-buffer-%e7%b1%bb%e5%9e%8b%e4%ba%92%e8%bd%ac"
+                            data-id="字符串与-buffer-类型互转"
+                            class="anchor"
+                            ><span>字符串与 Buffer 类型互转</span></a
+                        >
+                    </h3>
+                    <p><strong>字符串转 Buffer</strong></p>
+                    <p>
+                        这个相信不会陌生了，通过上面讲解的 Buffer.form()
+                        实现，如果不传递 encoding 默认按照 UTF-8 格式转换存储
+                    </p>
+                    <pre
+                        v-pre=""
+                        data-lang="js"
+                    ><code class="lang-js"><span class="token keyword">const</span> buf <span class="token operator">=</span> Buffer<span class="token punctuation">.</span><span class="token function">from</span><span class="token punctuation">(</span><span class="token string">'Node.js 技术栈'</span><span class="token punctuation">,</span> <span class="token string">'UTF-8'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>buf<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// &lt;Buffer 4e 6f 64 65 2e 6a 73 20 e6 8a 80 e6 9c af e6 a0 88&gt;</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>buf<span class="token punctuation">.</span>length<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 17</span></code></pre>
+                    <p><strong>Buffer 转换为字符串</strong></p>
+                    <p>
+                        Buffer 转换为字符串也很简单，使用 toString([encoding],
+                        [start], [end]) 方法，默认编码仍为 UTF-8，如果不传
+                        start、end 可实现全部转换，传了 start、end
+                        可实现部分转换（这里要小心了）
+                    </p>
+                    <pre
+                        v-pre=""
+                        data-lang="js"
+                    ><code class="lang-js"><span class="token keyword">const</span> buf <span class="token operator">=</span> Buffer<span class="token punctuation">.</span><span class="token function">from</span><span class="token punctuation">(</span><span class="token string">'Node.js 技术栈'</span><span class="token punctuation">,</span> <span class="token string">'UTF-8'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>buf<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// &lt;Buffer 4e 6f 64 65 2e 6a 73 20 e6 8a 80 e6 9c af e6 a0 88&gt;</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>buf<span class="token punctuation">.</span>length<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 17</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>buf<span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token string">'UTF-8'</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">9</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// Node.js �</span></code></pre>
+                    <p>
+                        运行查看，可以看到以上输出结果为
+                        <code>Node.js �</code> 出现了乱码，为什么？
+                    </p>
+                    <p><strong>转换过程中为什么出现乱码？</strong></p>
+                    <p>
+                        首先以上示例中使用的默认编码方式
+                        UTF-8，问题就出在这里一个中文在 UTF-8 下占用 3
+                        个字节，<code>技</code> 这个字在 buf 中对应的字节为
+                        <code>8a 80 e6</code> 而我们的设定的范围为 0～9
+                        因此只输出了
+                        <code>8a</code>，这个时候就会造成字符被截断出现乱码。
+                    </p>
+                    <p>下面我们改下示例的截取范围：</p>
+                    <pre
+                        v-pre=""
+                        data-lang="js"
+                    ><code class="lang-js"><span class="token keyword">const</span> buf <span class="token operator">=</span> Buffer<span class="token punctuation">.</span><span class="token function">from</span><span class="token punctuation">(</span><span class="token string">'Node.js 技术栈'</span><span class="token punctuation">,</span> <span class="token string">'UTF-8'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>buf<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// &lt;Buffer 4e 6f 64 65 2e 6a 73 20 e6 8a 80 e6 9c af e6 a0 88&gt;</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>buf<span class="token punctuation">.</span>length<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 17</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>buf<span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token string">'UTF-8'</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">11</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// Node.js 技</span></code></pre>
+                    <p>可以看到已经正常输出了</p>
+                    <h2 id="buffer内存机制">
+                        <a
+                            href="https://www.nodejs.red/#/nodejs/buffer?id=buffer%e5%86%85%e5%ad%98%e6%9c%ba%e5%88%b6"
+                            data-id="buffer内存机制"
+                            class="anchor"
+                            ><span>Buffer内存机制</span></a
+                        >
+                    </h2>
+                    <p>
+                        在
+                        <a
+                            href="https://www.nodejs.red/#/nodejs/memory"
+                            target="_blank"
+                            rel="noopener"
+                            >Nodejs 中的 内存管理和 V8 垃圾回收机制</a
+                        >
+                        一节主要讲解了在 Node.js 的垃圾回收中主要使用 V8
+                        来管理，但是并没有提到 Buffer
+                        类型的数据是如何回收的，下面让我们来了解 Buffer
+                        的内存回收机制。
+                    </p>
+                    <p>
+                        由于 Buffer
+                        需要处理的是大量的二进制数据，假如用一点就向系统去申请，则会造成频繁的向系统申请内存调用，所以
+                        Buffer 所占用的内存<strong>不再由 V8 分配</strong
+                        >，而是在 Node.js 的
+                        <strong>C++ 层面完成申请</strong>，在
+                        <strong>JavaScript 中进行内存分配</strong
+                        >。因此，这部分内存我们称之为<strong>堆外内存</strong>。
+                    </p>
+                    <p>
+                        <strong>注意</strong>：以下使用到的 buffer.js 源码为
+                        Node.js v10.x 版本，地址：<a
+                            href="https://github.com/nodejs/node/blob/v10.x/lib/buffer.js"
+                            target="_blank"
+                            rel="noopener"
+                            >https://github.com/nodejs/node/blob/v10.x/lib/buffer.js</a
+                        >
+                    </p>
+                    <h3 id="buffer内存分配原理">
+                        <a
+                            href="https://www.nodejs.red/#/nodejs/buffer?id=buffer%e5%86%85%e5%ad%98%e5%88%86%e9%85%8d%e5%8e%9f%e7%90%86"
+                            data-id="buffer内存分配原理"
+                            class="anchor"
+                            ><span>Buffer内存分配原理</span></a
+                        >
+                    </h3>
+                    <p>
+                        Node.js 采用了 slab
+                        机制进行<strong>预先申请、事后分配</strong>，是一种动态的管理机制。
+                    </p>
+                    <p>
+                        使用 Buffer.alloc(size) 传入一个指定的 size
+                        就会申请一块固定大小的内存区域，slab 具有如下三种状态：
+                    </p>
+                    <ul>
+                        <li>full：完全分配状态</li>
+                        <li>partial：部分分配状态</li>
+                        <li>empty：没有被分配状态</li>
+                    </ul>
+                    <p><strong>8KB 限制</strong></p>
+                    <p>
+                        Node.js 以 8KB 为界限来区分是小对象还是大对象，在
+                        <a
+                            href="https://github.com/nodejs/node/blob/v10.x/lib/buffer.js"
+                            target="_blank"
+                            rel="noopener"
+                            >buffer.js</a
+                        >
+                        中可以看到以下代码
+                    </p>
+                    <pre
+                        v-pre=""
+                        data-lang="js"
+                    ><code class="lang-js">Buffer<span class="token punctuation">.</span>poolSize <span class="token operator">=</span> <span class="token number">8</span> <span class="token operator">*</span> <span class="token number">1024</span><span class="token punctuation">;</span> <span class="token comment">// 102 行，Node.js 版本为 v10.x</span></code></pre>
+                    <p>
+                        在 <strong>Buffer 初识</strong> 一节里有提到过
+                        <code>Buffer 在创建时大小已经被确定且是无法调整的</code>
+                        到这里应该就明白了。
+                    </p>
+                    <p><strong>Buffer 对象分配</strong></p>
+                    <p>
+                        以下代码示例，在加载时直接调用了 createPool()
+                        相当于直接初始化了一个 8 KB
+                        的内存空间，这样在第一次进行内存分配时也会变得更高效。另外在初始化的同时还初始化了一个新的变量
+                        <strong>poolOffset = 0</strong>
+                        这个变量会记录已经使用了多少字节。
+                    </p>
+                    <pre
+                        v-pre=""
+                        data-lang="js"
+                    ><code class="lang-js">Buffer<span class="token punctuation">.</span>poolSize <span class="token operator">=</span> <span class="token number">8</span> <span class="token operator">*</span> <span class="token number">1024</span><span class="token punctuation">;</span>
+<span class="token keyword">var</span> poolSize<span class="token punctuation">,</span> poolOffset<span class="token punctuation">,</span> allocPool<span class="token punctuation">;</span>
+
+<span class="token operator">...</span> <span class="token comment">// 中间代码省略</span>
+
+<span class="token keyword">function</span> <span class="token function">createPool</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  poolSize <span class="token operator">=</span> Buffer<span class="token punctuation">.</span>poolSize<span class="token punctuation">;</span>
+  allocPool <span class="token operator">=</span> <span class="token function">createUnsafeArrayBuffer</span><span class="token punctuation">(</span>poolSize<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  poolOffset <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token function">createPool</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 129 行</span></code></pre>
+                    <p>此时，新构造的 slab 如下所示：</p>
+                    <p>
+                        <img
+                            src="./[Buffer] 缓冲区模块_files/slab_poolOffset_0.png"
+                            data-origin="./img/slab_poolOffset_0.png"
+                            alt=""
+                            class="medium-zoom-image"
+                        />
+                    </p>
+                    <p>
+                        现在让我们来尝试分配一个大小为 2048 的 Buffer
+                        对象，代码如下所示：
+                    </p>
+                    <pre
+                        v-pre=""
+                        data-lang="js"
+                    ><code class="lang-js">Buffer<span class="token punctuation">.</span><span class="token function">alloc</span><span class="token punctuation">(</span><span class="token number">2</span> <span class="token operator">*</span> <span class="token number">1024</span><span class="token punctuation">)</span></code></pre>
+                    <p>
+                        现在让我们先看下当前的 slab 内存是怎么样的？如下所示：
+                    </p>
+                    <p>
+                        <img
+                            src="./[Buffer] 缓冲区模块_files/slab_poolOffset_2048.png"
+                            data-origin="./img/slab_poolOffset_2048.png"
+                            alt=""
+                            class="medium-zoom-image"
+                        />
+                    </p>
+                    <p>
+                        那么这个分配过程是怎样的呢？让我们再看 buffer.js
+                        另外一个核心的方法 allocate(size)
+                    </p>
+                    <pre
+                        v-pre=""
+                        data-lang="js"
+                    ><code class="lang-js"><span class="token comment">// https://github.com/nodejs/node/blob/v10.x/lib/buffer.js#L318</span>
+<span class="token keyword">function</span> <span class="token function">allocate</span><span class="token punctuation">(</span><span class="token parameter">size</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span>size <span class="token operator">&lt;=</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">FastBuffer</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token comment">// 当分配的空间小于 Buffer.poolSize 向右移位，这里得出来的结果为 4KB</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span>size <span class="token operator">&lt;</span> <span class="token punctuation">(</span>Buffer<span class="token punctuation">.</span>poolSize <span class="token operator">&gt;&gt;&gt;</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>size <span class="token operator">&gt;</span> <span class="token punctuation">(</span>poolSize <span class="token operator">-</span> poolOffset<span class="token punctuation">)</span><span class="token punctuation">)</span>
+      <span class="token function">createPool</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">var</span> b <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">FastBuffer</span><span class="token punctuation">(</span>allocPool<span class="token punctuation">,</span> poolOffset<span class="token punctuation">,</span> size<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    poolOffset <span class="token operator">+=</span> size<span class="token punctuation">;</span> <span class="token comment">// 已使用空间累加</span>
+    <span class="token function">alignPool</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 8 字节内存对齐处理</span>
+    <span class="token keyword">return</span> b<span class="token punctuation">;</span>
+  <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span> <span class="token comment">// C++ 层面申请</span>
+    <span class="token keyword">return</span> <span class="token function">createUnsafeBuffer</span><span class="token punctuation">(</span>size<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+                    <p>
+                        读完上面的代码，已经很清晰的可以看到何时会分配小 Buffer
+                        对象，又何时会去分配大 Buffer 对象。
+                    </p>
+                    <h3 id="buffer-内存分配总结">
+                        <a
+                            href="https://www.nodejs.red/#/nodejs/buffer?id=buffer-%e5%86%85%e5%ad%98%e5%88%86%e9%85%8d%e6%80%bb%e7%bb%93"
+                            data-id="buffer-内存分配总结"
+                            class="anchor"
+                            ><span>Buffer 内存分配总结</span></a
+                        >
+                    </h3>
+                    <p>
+                        这块内容着实难理解，翻了几本 Node.js
+                        相关书籍，朴灵大佬的「深入浅出 Node.js」Buffer
+                        一节还是讲解的挺详细的，推荐大家去阅读下。
+                    </p>
+                    <ol>
+                        <li>
+                            在初次加载时就会初始化 1 个
+                            <strong>8KB 的内存空间</strong>，buffer.js
+                            源码有体现
+                        </li>
+                        <li>
+                            根据申请的内存大小分为
+                            <strong>小 Buffer 对象</strong> 和
+                            <strong>大 Buffer 对象</strong>
+                        </li>
+                        <li>
+                            小 Buffer 情况，会继续判断这个 slab 空间是否足够
+                            <ul>
+                                <li>
+                                    如果空间足够就去使用剩余空间同时更新 slab
+                                    分配状态，偏移量会增加
+                                </li>
+                                <li>
+                                    如果空间不足，slab
+                                    空间不足，就会去创建一个新的 slab
+                                    空间用来分配
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            大 Buffer 情况，则会直接走 createUnsafeBuffer(size)
+                            函数
+                        </li>
+                        <li>
+                            不论是小 Buffer 对象还是大 Buffer 对象，内存分配是在
+                            C++ 层面完成，内存管理在 JavaScript
+                            层面，最终还是可以被 V8 的垃圾回收标记所回收。
+                        </li>
+                    </ol>
+                    <h2 id="buffer应用场景">
+                        <a
+                            href="https://www.nodejs.red/#/nodejs/buffer?id=buffer%e5%ba%94%e7%94%a8%e5%9c%ba%e6%99%af"
+                            data-id="buffer应用场景"
+                            class="anchor"
+                            ><span>Buffer应用场景</span></a
+                        >
+                    </h2>
+                    <p>
+                        以下列举一些 Buffer
+                        在实际业务中的应用场景，也欢迎大家在评论区补充！
+                    </p>
+                    <h3 id="io-操作">
+                        <a
+                            href="https://www.nodejs.red/#/nodejs/buffer?id=io-%e6%93%8d%e4%bd%9c"
+                            data-id="io-操作"
+                            class="anchor"
+                            ><span>I/O 操作</span></a
+                        >
+                    </h3>
+                    <p>
+                        关于 I/O 可以是文件或网络 I/O，以下为通过流的方式将
+                        input.txt 的信息读取出来之后写入到 output.txt 文件，关于
+                        Stream 与 Buffer 的关系不明白的在回头看下
+                        <strong>Buffer 初识</strong> 一节讲解的
+                        <code>什么是 Stream?</code>、<code>什么是 Buffer?</code>
+                    </p>
+                    <pre
+                        v-pre=""
+                        data-lang="js"
+                    ><code class="lang-js"><span class="token keyword">const</span> fs <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'fs'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">const</span> inputStream <span class="token operator">=</span> fs<span class="token punctuation">.</span><span class="token function">createReadStream</span><span class="token punctuation">(</span><span class="token string">'input.txt'</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 创建可读流</span>
+<span class="token keyword">const</span> outputStream <span class="token operator">=</span> fs<span class="token punctuation">.</span><span class="token function">createWriteStream</span><span class="token punctuation">(</span><span class="token string">'output.txt'</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 创建可写流</span>
+
+inputStream<span class="token punctuation">.</span><span class="token function">pipe</span><span class="token punctuation">(</span>outputStream<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 管道读写</span></code></pre>
+                    <p>
+                        在 Stream 中我们是不需要手动去创建自己的缓冲区，在
+                        Node.js 的<strong>流中将会自动创建</strong>。
+                    </p>
+                    <h3 id="zlibjs">
+                        <a
+                            href="https://www.nodejs.red/#/nodejs/buffer?id=zlibjs"
+                            data-id="zlibjs"
+                            class="anchor"
+                            ><span>zlib.js</span></a
+                        >
+                    </h3>
+                    <p>
+                        zlib.js 为 Node.js
+                        的核心库之一，其利用了缓冲区（Buffer）的功能来操作二进制数据流，提供了压缩或解压功能。参考源代码
+                        <a
+                            href="https://github.com/nodejs/node/blob/master/lib/zlib.js"
+                            target="_blank"
+                            rel="noopener"
+                            >zlib.js 源码</a
+                        >
+                    </p>
+                    <h3 id="加解密">
+                        <a
+                            href="https://www.nodejs.red/#/nodejs/buffer?id=%e5%8a%a0%e8%a7%a3%e5%af%86"
+                            data-id="加解密"
+                            class="anchor"
+                            ><span>加解密</span></a
+                        >
+                    </h3>
+                    <p>
+                        在一些加解密算法中会遇到使用 Buffer，例如
+                        crypto.createCipheriv 的第二个参数 key 为 String 或
+                        Buffer 类型，如果是 Buffer
+                        类型，就用到了本篇我们讲解的内容，以下做了一个简单的加密示例，重点使用了
+                        Buffer.alloc()
+                        初始化一个实例（这个上面有介绍），之后使用了 fill
+                        方法做了填充，这里重点在看下这个方法的使用。
+                    </p>
+                    <p>
+                        <strong
+                            >buf.fill(value[, offset[, end]][,
+                            encoding])</strong
+                        >
+                    </p>
+                    <ul>
+                        <li>value: 第一个参数为要填充的内容</li>
+                        <li>offset: 偏移量，填充的起始位置</li>
+                        <li>end: 结束填充 buf 的偏移量</li>
+                        <li>encoding: 编码集</li>
+                    </ul>
+                    <p><strong>以下为 Cipher 的对称加密 Demo</strong></p>
+                    <pre
+                        v-pre=""
+                        data-lang="js"
+                    ><code class="lang-js"><span class="token keyword">const</span> crypto <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'crypto'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> <span class="token punctuation">[</span>key<span class="token punctuation">,</span> iv<span class="token punctuation">,</span> algorithm<span class="token punctuation">,</span> encoding<span class="token punctuation">,</span> cipherEncoding<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">[</span>
+    <span class="token string">'a123456789'</span><span class="token punctuation">,</span> <span class="token string">''</span><span class="token punctuation">,</span> <span class="token string">'aes-128-ecb'</span><span class="token punctuation">,</span> <span class="token string">'utf8'</span><span class="token punctuation">,</span> <span class="token string">'base64'</span>
+<span class="token punctuation">]</span><span class="token punctuation">;</span>
+
+<span class="token keyword">const</span> <span class="token function-variable function">handleKey</span> <span class="token operator">=</span> <span class="token parameter">key</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+    <span class="token keyword">const</span> bytes <span class="token operator">=</span> Buffer<span class="token punctuation">.</span><span class="token function">alloc</span><span class="token punctuation">(</span><span class="token number">16</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 初始化一个 Buffer 实例，每一项都用 00 填充</span>
+    console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>bytes<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// &lt;Buffer 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00&gt;</span>
+    bytes<span class="token punctuation">.</span><span class="token function">fill</span><span class="token punctuation">(</span>key<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">10</span><span class="token punctuation">)</span> <span class="token comment">// 填充</span>
+    console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>bytes<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// &lt;Buffer 61 31 32 33 34 35 36 37 38 39 00 00 00 00 00 00&gt;</span>
+
+    <span class="token keyword">return</span> bytes<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">let</span> cipher <span class="token operator">=</span> crypto<span class="token punctuation">.</span><span class="token function">createCipheriv</span><span class="token punctuation">(</span>algorithm<span class="token punctuation">,</span> <span class="token function">handleKey</span><span class="token punctuation">(</span>key<span class="token punctuation">)</span><span class="token punctuation">,</span> iv<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">let</span> crypted <span class="token operator">=</span> cipher<span class="token punctuation">.</span><span class="token function">update</span><span class="token punctuation">(</span><span class="token string">'Node.js 技术栈'</span><span class="token punctuation">,</span> encoding<span class="token punctuation">,</span> cipherEncoding<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    crypted <span class="token operator">+=</span> cipher<span class="token punctuation">.</span><span class="token function">final</span><span class="token punctuation">(</span>cipherEncoding<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>crypted<span class="token punctuation">)</span> <span class="token comment">// jE0ODwuKN6iaKFKqd3RF4xFZkOpasy8WfIDl8tRC5t0=</span></code></pre>
+                    <h2 id="buffer-vs-cache">
+                        <a
+                            href="https://www.nodejs.red/#/nodejs/buffer?id=buffer-vs-cache"
+                            data-id="buffer-vs-cache"
+                            class="anchor"
+                            ><span>Buffer VS Cache</span></a
+                        >
+                    </h2>
+                    <blockquote>
+                        <p>缓冲（Buffer）与缓存（Cache）的区别？</p>
+                    </blockquote>
+                    <p><strong>缓冲（Buffer）</strong></p>
+                    <p>
+                        缓冲（Buffer）是用于处理二进制流数据，将数据缓冲起来，它是临时性的，对于流式数据，会采用缓冲区将数据临时存储起来，等缓冲到一定的大小之后在存入硬盘中。视频播放器就是一个经典的例子，有时你会看到一个缓冲的图标，这意味着此时这一组缓冲区并未填满，当数据到达填满缓冲区并且被处理之后，此时缓冲图标消失，你可以看到一些图像数据。
+                    </p>
+                    <p><strong>缓存（Cache）</strong></p>
+                    <p>
+                        缓存（Cache）我们可以看作是一个中间层，它可以是永久性的将热点数据进行缓存，使得访问速度更快，例如我们通过
+                        Memory、Redis
+                        等将数据从硬盘或其它第三方接口中请求过来进行缓存，目的就是将数据存于内存的缓存区中，这样对同一个资源进行访问，速度会更快，也是性能优化一个重要的点。
+                    </p>
+                    <p>
+                        来自知乎的一个讨论，点击
+                        <a
+                            href="https://www.zhihu.com/question/26190832"
+                            target="_blank"
+                            rel="noopener"
+                            >more
+                        </a>
+                        查看
+                    </p>
+                    <h2 id="buffer-vs-string">
+                        <a
+                            href="https://www.nodejs.red/#/nodejs/buffer?id=buffer-vs-string"
+                            data-id="buffer-vs-string"
+                            class="anchor"
+                            ><span>Buffer VS String</span></a
+                        >
+                    </h2>
+                    <p>通过压力测试来看看 String 和 Buffer 两者的性能如何？</p>
+                    <pre
+                        v-pre=""
+                        data-lang="js"
+                    ><code class="lang-js"><span class="token keyword">const</span> http <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'http'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">let</span> s <span class="token operator">=</span> <span class="token string">''</span><span class="token punctuation">;</span>
+<span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">let</span> i<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">;</span> i<span class="token operator">&lt;</span><span class="token number">1024</span><span class="token operator">*</span><span class="token number">10</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    s<span class="token operator">+=</span><span class="token string">'a'</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">const</span> str <span class="token operator">=</span> s<span class="token punctuation">;</span>
+<span class="token keyword">const</span> bufStr <span class="token operator">=</span> Buffer<span class="token punctuation">.</span><span class="token function">from</span><span class="token punctuation">(</span>s<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> server <span class="token operator">=</span> http<span class="token punctuation">.</span><span class="token function">createServer</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token parameter">req<span class="token punctuation">,</span> res</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+    console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>req<span class="token punctuation">.</span>url<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>req<span class="token punctuation">.</span>url <span class="token operator">===</span> <span class="token string">'/buffer'</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        res<span class="token punctuation">.</span><span class="token function">end</span><span class="token punctuation">(</span>bufStr<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>req<span class="token punctuation">.</span>url <span class="token operator">===</span> <span class="token string">'/string'</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        res<span class="token punctuation">.</span><span class="token function">end</span><span class="token punctuation">(</span>str<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+server<span class="token punctuation">.</span><span class="token function">listen</span><span class="token punctuation">(</span><span class="token number">3000</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+                    <p>
+                        以上实例我放在虚拟机里进行测试，你也可以在本地电脑测试，使用
+                        AB 测试工具。
+                    </p>
+                    <p><strong>测试 string</strong></p>
+                    <p>
+                        看以下几个重要的参数指标，之后通过 buffer 传输进行对比
+                    </p>
+                    <ul>
+                        <li>Complete requests: 21815</li>
+                        <li>Requests per second: 363.58 [#/sec] (mean)</li>
+                        <li>Transfer rate: 3662.39 [Kbytes/sec] received</li>
+                    </ul>
+                    <pre
+                        v-pre=""
+                        data-lang=""
+                    ><code class="lang-">$ ab -c 200 -t 60 http://192.168.6.131:3000/string</code></pre>
+                    <p>
+                        <img
+                            src="./[Buffer] 缓冲区模块_files/ab_string.png"
+                            data-origin="./img/ab_string.png"
+                            alt=""
+                            class="medium-zoom-image"
+                        />
+                    </p>
+                    <p><strong>测试 buffer</strong></p>
+                    <p>
+                        可以看到通过 buffer 传输总共的请求数为 50000、QPS
+                        达到了两倍多的提高、每秒传输的字节为 9138.82
+                        KB，从这些数据上可以证明提前将数据转换为 Buffer
+                        的方式，可以使性能得到近一倍的提升。
+                    </p>
+                    <ul>
+                        <li>Complete requests: 50000</li>
+                        <li>Requests per second: 907.24 [#/sec] (mean)</li>
+                        <li>Transfer rate: 9138.82 [Kbytes/sec] received</li>
+                    </ul>
+                    <pre
+                        v-pre=""
+                        data-lang=""
+                    ><code class="lang-">$ ab -c 200 -t 60 http://192.168.6.131:3000/buffer</code></pre>
+                    <p>
+                        <img
+                            src="./[Buffer] 缓冲区模块_files/ab_buffer.png"
+                            data-origin="./img/ab_buffer.png"
+                            alt=""
+                            class="medium-zoom-image"
+                        />
+                    </p>
+                    <p>
+                        在 HTTP 传输中传输的是二进制数据，上面例子中的 /string
+                        接口直接返回的字符串，这时候 HTTP
+                        在传输之前会先将字符串转换为 Buffer
+                        类型，以二进制数据传输，通过流（Stream）的方式一点点返回到客户端。但是直接返回
+                        Buffer
+                        类型，则少了每次的转换操作，对于性能也是有提升的。
+                    </p>
+                    <p>
+                        在一些 Web 应用中，对于静态数据可以预先转为 Buffer
+                        进行传输，可以有效减少 CPU 的重复使用（重复的字符串转
+                        Buffer 操作）。
+                    </p>
+                    <h2 id="reference">
+                        <a
+                            href="https://www.nodejs.red/#/nodejs/buffer?id=reference"
+                            data-id="reference"
+                            class="anchor"
+                            ><span>Reference</span></a
+                        >
+                    </h2>
+                    <ul>
+                        <li>
+                            <a
+                                href="http://nodejs.cn/api/buffer.html"
+                                target="_blank"
+                                rel="noopener"
+                                >http://nodejs.cn/api/buffer.html</a
+                            >
+                        </li>
+                        <li>
+                            <a
+                                href="https://book.douban.com/subject/25768396/"
+                                target="_blank"
+                                rel="noopener"
+                                >深入浅出 Node.js Buffer</a
+                            >
+                        </li>
+                        <li>
+                            <a
+                                href="https://www.freecodecamp.org/news/do-you-want-a-better-understanding-of-buffer-in-node-js-check-this-out-2e29de2968e8/"
+                                target="_blank"
+                                rel="noopener"
+                                >Do you want a better understanding of Buffer in
+                                Node.js? Check this out.</a
+                            >
+                        </li>
+                        <li>
+                            <a
+                                href="https://hacks.mozilla.org/2017/06/a-cartoon-intro-to-arraybuffers-and-sharedarraybuffers/"
+                                target="_blank"
+                                rel="noopener"
+                                >A cartoon intro to ArrayBuffers and
+                                SharedArrayBuffers</a
+                            >
+                        </li>
+                        <li>
+                            <a
+                                href="https://github.com/nodejs/node/blob/v10.x/lib/buffer.js"
+                                target="_blank"
+                                rel="noopener"
+                                >buffer.js v10.x</a
+                            >
+                        </li>
+                    </ul>
+                    <div class="docsify-pagination-container">
+                        <div class="pagination-item pagination-item--previous">
+                            <a href="https://www.nodejs.red/#/nodejs/crypto">
+                                <div class="pagination-item-label">
+                                    <svg
+                                        width="10"
+                                        height="16"
+                                        viewBox="0 0 10 16"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                    >
+                                        <polyline
+                                            fill="none"
+                                            vector-effect="non-scaling-stroke"
+                                            points="8,2 2,8 8,14"
+                                        ></polyline>
+                                    </svg>
+                                    <span>PREVIOUS</span>
+                                </div>
+                                <div class="pagination-item-title">
+                                    [Crypto] 加解密模块
+                                </div>
+                            </a>
+                        </div>
+
+                        <div class="pagination-item pagination-item--next">
+                            <a
+                                href="https://www.nodejs.red/#/nodejs/process-threads"
+                            >
+                                <div class="pagination-item-label">
+                                    <span>NEXT</span>
+                                    <svg
+                                        width="10"
+                                        height="16"
+                                        viewBox="0 0 10 16"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                    >
+                                        <polyline
+                                            fill="none"
+                                            vector-effect="non-scaling-stroke"
+                                            points="2,2 8,8 2,14"
+                                        ></polyline>
+                                    </svg>
+                                </div>
+                                <div class="pagination-item-title">
+                                    [Process] 线程和进程
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </article>
+                <div
+                    id="gitalk-container-buffer"
+                    class="gitalk-container"
+                    style="width: 912px; margin: 0px auto 20px"
+                >
+                    <div class="gt-container">
+                        <div class="gt-meta">
+                            <span class="gt-counts"
+                                ><a
+                                    class="gt-link gt-link-counts"
+                                    href="https://github.com/qufei1993/Nodejs-Roadmap/issues/52"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    >1</a
+                                >
+                                条评论</span
+                            >
+                            <div class="gt-user">
+                                <div class="gt-user-inner">
+                                    <span class="gt-user-name">未登录用户</span
+                                    ><span class="gt-ico gt-ico-arrdown"
+                                        ><span class="gt-svg"
+                                            ><svg
+                                                viewBox="0 0 1024 1024"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                p-id="1619"
+                                            >
+                                                <path
+                                                    d="M511.872 676.8c-0.003 0-0.006 0-0.008 0-9.137 0-17.379-3.829-23.21-9.97l-251.277-265.614c-5.415-5.72-8.743-13.464-8.744-21.984 0-17.678 14.33-32.008 32.008-32.008 9.157 0 17.416 3.845 23.25 10.009l228.045 241.103 228.224-241.088c5.855-6.165 14.113-10.001 23.266-10.001 8.516 0 16.256 3.32 21.998 8.736 12.784 12.145 13.36 32.434 1.264 45.233l-251.52 265.6c-5.844 6.155-14.086 9.984-23.223 9.984-0.025 0-0.051 0-0.076 0z"
+                                                    p-id="1620"
+                                                ></path></svg></span
+                                    ></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="gt-header">
+                            <a class="gt-avatar-github"
+                                ><span class="gt-ico gt-ico-github"
+                                    ><span class="gt-svg"
+                                        ><svg
+                                            viewBox="0 0 1024 1024"
+                                            version="1.1"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                        >
+                                            <path
+                                                d="M64 524C64 719.602 189.356 885.926 364.113 947.017 387.65799 953 384 936.115 384 924.767L384 847.107C248.118 863.007 242.674 773.052 233.5 758.001 215 726.501 171.5 718.501 184.5 703.501 215.5 687.501 247 707.501 283.5 761.501 309.956 800.642 361.366 794.075 387.658 787.497 393.403 763.997 405.637 743.042 422.353 726.638 281.774 701.609 223 615.67 223 513.5 223 464.053 239.322 418.406 271.465 381.627 251.142 320.928 273.421 269.19 276.337 261.415 334.458 256.131 394.888 302.993 399.549 306.685 432.663 297.835 470.341 293 512.5 293 554.924 293 592.81 297.896 626.075 306.853 637.426 298.219 693.46 258.054 747.5 262.966 750.382 270.652 772.185 321.292 753.058 381.083 785.516 417.956 802 463.809 802 513.5 802 615.874 742.99 701.953 601.803 726.786 625.381 750.003 640 782.295 640 818.008L640 930.653C640.752 939.626 640 948.664978 655.086 948.665 832.344 888.962 960 721.389 960 524 960 276.576 759.424 76 512 76 264.577 76 64 276.576 64 524Z"
+                                            ></path>
+                                        </svg> </span></span
+                            ></a>
+                            <div class="gt-header-comment">
+                                <textarea
+                                    class="gt-header-textarea"
+                                    placeholder="说点什么"
+                                    style="
+                                        overflow: hidden;
+                                        overflow-wrap: break-word;
+                                        resize: none;
+                                        height: 72px;
+                                    "
+                                ></textarea>
+                                <div
+                                    class="gt-header-preview markdown-body hide"
+                                ></div>
+                                <div class="gt-header-controls">
+                                    <a
+                                        class="gt-header-controls-tip"
+                                        href="https://guides.github.com/features/mastering-markdown/"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        ><span class="gt-ico gt-ico-tip"
+                                            ><span class="gt-svg"
+                                                ><svg
+                                                    viewBox="0 0 1024 1024"
+                                                    version="1.1"
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                >
+                                                    <path
+                                                        d="M512 366.949535c-16.065554 0-29.982212 13.405016-29.982212 29.879884l0 359.070251c0 16.167882 13.405016 29.879884 29.982212 29.879884 15.963226 0 29.879884-13.405016 29.879884-29.879884L541.879884 396.829419C541.879884 380.763865 528.474868 366.949535 512 366.949535L512 366.949535z"
+                                                        p-id="3083"
+                                                    ></path>
+                                                    <path
+                                                        d="M482.017788 287.645048c0-7.776956 3.274508-15.553912 8.80024-21.181973 5.525732-5.525732 13.302688-8.80024 21.181973-8.80024 7.776956 0 15.553912 3.274508 21.079644 8.80024 5.525732 5.62806 8.80024 13.405016 8.80024 21.181973 0 7.776956-3.274508 15.656241-8.80024 21.181973-5.525732 5.525732-13.405016 8.697911-21.079644 8.697911-7.879285 0-15.656241-3.274508-21.181973-8.697911C485.292295 303.301289 482.017788 295.524333 482.017788 287.645048L482.017788 287.645048z"
+                                                        p-id="3084"
+                                                    ></path>
+                                                    <path
+                                                        d="M512 946.844409c-239.8577 0-434.895573-195.037873-434.895573-434.895573 0-239.8577 195.037873-434.895573 434.895573-434.895573 239.755371 0 434.895573 195.037873 434.895573 434.895573C946.895573 751.806535 751.755371 946.844409 512 946.844409zM512 126.17088c-212.740682 0-385.880284 173.037274-385.880284 385.777955 0 212.740682 173.037274 385.777955 385.880284 385.777955 212.740682 0 385.777955-173.037274 385.777955-385.777955C897.777955 299.208154 724.740682 126.17088 512 126.17088z"
+                                                        p-id="3085"
+                                                    ></path>
+                                                </svg> </span
+                                            ><span class="gt-ico-text"
+                                                >支持 Markdown 语法</span
+                                            ></span
+                                        ></a
+                                    ><button class="gt-btn gt-btn-preview">
+                                        <span class="gt-btn-text"
+                                            >预览</span
+                                        ></button
+                                    ><button class="gt-btn gt-btn-login">
+                                        <span class="gt-btn-text"
+                                            >使用 GitHub 登录</span
+                                        >
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="gt-comments">
+                            <div style="position: relative">
+                                <div
+                                    class="gt-comment"
+                                    style="transform-origin: center top"
+                                >
+                                    <div class="gt-avatar gt-comment-avatar">
+                                        <img
+                                            src="./[Buffer] 缓冲区模块_files/26326014"
+                                            alt="@xty1992a"
+                                        />
+                                    </div>
+                                    <div class="gt-comment-content">
+                                        <div class="gt-comment-header">
+                                            <div
+                                                class="gt-comment-block-1"
+                                            ></div>
+                                            <a
+                                                class="gt-comment-username"
+                                                href="https://github.com/xty1992a"
+                                                >xty1992a</a
+                                            ><span class="gt-comment-text"
+                                                >发表于</span
+                                            ><span class="gt-comment-date"
+                                                >将近 2 年前</span
+                                            ><a
+                                                class="gt-comment-like"
+                                                title="Like"
+                                                ><span
+                                                    class="gt-ico gt-ico-heart"
+                                                    ><span class="gt-svg"
+                                                        ><svg
+                                                            viewBox="0 0 1024 1024"
+                                                            version="1.1"
+                                                            xmlns="http://www.w3.org/2000/svg"
+                                                            xmlns:xlink="http://www.w3.org/1999/xlink"
+                                                        >
+                                                            <path
+                                                                d="M527.061333 166.528A277.333333 277.333333 0 0 1 1000.618667 362.666667a277.333333 277.333333 0 0 1-81.28 196.138666l-377.173334 377.173334a42.666667 42.666667 0 0 1-60.330666 0l-377.173334-377.173334a277.376 277.376 0 0 1 392.277334-392.277333l15.061333 15.061333 15.061333-15.061333z m286.72 377.173333l45.226667-45.226666a192 192 0 0 0-135.808-327.893334 192 192 0 0 0-135.808 56.32l-45.226667 45.226667a42.666667 42.666667 0 0 1-60.330666 0l-45.226667-45.226667a192.042667 192.042667 0 0 0-271.616 271.573334L512 845.482667l301.781333-301.781334z"
+                                                            ></path>
+                                                        </svg> </span></span></a
+                                            ><a
+                                                class="gt-comment-reply"
+                                                title="Reply"
+                                                ><span
+                                                    class="gt-ico gt-ico-reply"
+                                                    ><span class="gt-svg"
+                                                        ><svg
+                                                            viewBox="0 0 1332 1024"
+                                                            version="1.1"
+                                                            xmlns="http://www.w3.org/2000/svg"
+                                                        >
+                                                            <path
+                                                                d="M529.066665 273.066666 529.066665 0 51.2 477.866666 529.066665 955.733335 529.066665 675.84C870.4 675.84 1109.333335 785.066665 1280 1024 1211.733335 682.666665 1006.933335 341.333334 529.066665 273.066666"
+                                                            ></path>
+                                                        </svg> </span></span
+                                            ></a>
+                                        </div>
+                                        <div
+                                            class="gt-comment-body markdown-body"
+                                        >
+                                            <p dir="auto">
+                                                大佬,你的公交车配图是小黄油的吧<g-emoji
+                                                    class="g-emoji"
+                                                    alias="joy"
+                                                    fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f602.png"
+                                                    >😂</g-emoji
+                                                >
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+        <script>
+            var gitalkConfig = {
+                clientID: "084f309ea8bc385148bc",
+                clientSecret: "fa4bff71adc7fbb44a7ca6deffecc9ec43e29301",
+                accessToken: "30c55e31acbb0cb61d30f92d14e32541880eefaf",
+                repo: "Nodejs-Roadmap",
+                owner: "q-angelo",
+                admin: ["q-angelo"],
+                distractionFreeMode: false,
+            };
+            window.$docsify = {
+                name: "《Nodejs技术栈》",
+                repo: "https://github.com/Q-Angelo/Nodejs-Roadmap",
+                auto2top: true,
+                coverpage: true,
+                loadSidebar: true,
+                maxLevel: 4,
+                subMaxLevel: 2,
+                search: {
+                    paths: "auto",
+                    placeholder: "🔍 Type to search ",
+                    noData: "😞 No Results! ",
+                    depth: 6,
+                },
+                pagination: {
+                    previousText: "PREVIOUS",
+                    nextText: "NEXT",
+                    crossChapter: true,
+                },
+                plugins: [
+                    function (hook, vm) {
+                        hook.doneEach(function () {
+                            var label, domObj, main, divEle, gitalk;
+                            label = vm.route.path.split("/").pop();
+                            domObj = Docsify.dom;
+                            main = domObj.getNode("#main");
+
+                            Array.apply(
+                                null,
+                                document.querySelectorAll(
+                                    "div.gitalk-container"
+                                )
+                            ).forEach(function (ele) {
+                                ele.remove();
+                            });
+
+                            divEle = domObj.create("div");
+                            divEle.id = "gitalk-container-" + label;
+                            divEle.className = "gitalk-container";
+                            divEle.style =
+                                "width: " +
+                                main.clientWidth +
+                                "px; margin: 0 auto 20px;";
+                            domObj.appendTo(domObj.find(".content"), divEle);
+                            gitalk = new Gitalk(
+                                Object.assign(gitalkConfig, {
+                                    id: !label ? "home" : label,
+                                })
+                            );
+                            gitalk.render("gitalk-container-" + label);
+                        });
+                    },
+                ],
+            };
+        </script>
+
+        <script src="./[Buffer] 缓冲区模块_files/docsify.min.js"></script>
+        <script src="./[Buffer] 缓冲区模块_files/gitalk.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/docsify@4/lib/plugins/search.js"></script>
+        <script src="./[Buffer] 缓冲区模块_files/docsify-pagination.min.js"></script>
+        <script src="./[Buffer] 缓冲区模块_files/zoom-image.js"></script>
+        <script src="./[Buffer] 缓冲区模块_files/prism-bash.js"></script>
+        <script src="./[Buffer] 缓冲区模块_files/prism-java.min.js"></script>
+
+        <div class="progress" style="opacity: 0; width: 0%"></div>
+    </body>
+</html>
