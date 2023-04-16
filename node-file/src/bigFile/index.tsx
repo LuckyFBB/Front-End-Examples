@@ -1,15 +1,17 @@
 import { UploadOutlined } from "@ant-design/icons";
-import { Button, Col, Progress, Row, Upload, UploadProps } from "antd";
+import { Button, Col, Progress, Row, Upload, UploadProps, message } from "antd";
 import React, { useState } from "react";
 import { request } from "../http";
 import { RcFile, UploadFile } from "antd/es/upload";
 import { AxiosProgressEvent } from "axios";
 import { clone } from "lodash";
+import shortid from "shortid";
 
 const BIG_FILE_SIZE = 25 * 1024 * 1024;
 const SLICE_FILE_SIZE = 5 * 1024 * 1024;
 
 interface ISlice {
+    id: string;
     slice: File;
     name: string;
     sliceName: string;
@@ -32,11 +34,12 @@ export const BigFile = () => {
             setTotalProgress(0);
         },
         fileList,
-        accept: "mp3/*",
     };
     const uploadFile = async () => {
         if (!fileList?.length) return alert("请选择文件");
         const file = fileList[0];
+        const shouldUpload = await verifyUpload(file.name);
+        if (!shouldUpload) return message.success("文件已存在，上传成功");
         if (file.size > BIG_FILE_SIZE) {
             // big handle
             getSliceList(file);
@@ -51,6 +54,7 @@ export const BigFile = () => {
         let index = 0;
         while (curSize < file.size) {
             sliceList.push({
+                id: shortid.generate(),
                 slice: new File(
                     [file.slice(curSize, (curSize += SLICE_FILE_SIZE))],
                     `${file.name}-${index}`
@@ -81,6 +85,8 @@ export const BigFile = () => {
                 })
             );
         await Promise.all(requestList);
+        // 合并分片
+        mergeSlice();
     };
 
     const sliceUploadProgress = (e: AxiosProgressEvent, index: number) => {
@@ -102,6 +108,18 @@ export const BigFile = () => {
                 );
             return newSliceList;
         });
+    };
+
+    const mergeSlice = () => {
+        request.post("/mergeSlice", {
+            size: SLICE_FILE_SIZE,
+            name: fileList[0].name,
+        });
+    };
+
+    const verifyUpload = async (name: string) => {
+        const res = await request.post("/verify", { name });
+        return res?.data?.data;
     };
 
     return (
@@ -128,13 +146,10 @@ export const BigFile = () => {
                     <Col span={12}>
                         切片进度
                         {sliceList.map((item) => (
-                            <Row gutter={[16, 16]} align="middle">
+                            <Row gutter={[16, 16]} align="middle" key={item.id}>
                                 <Col span={6}>{item.sliceName}:</Col>
                                 <Col span={18}>
-                                    <Progress
-                                        percent={item.progress}
-                                        key={item.sliceName}
-                                    />
+                                    <Progress percent={item.progress} />
                                 </Col>
                             </Row>
                         ))}
