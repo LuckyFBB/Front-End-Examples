@@ -2,3 +2,5 @@
 .DS_Store
 
 node_modules/
+
+/node-file/src/public
