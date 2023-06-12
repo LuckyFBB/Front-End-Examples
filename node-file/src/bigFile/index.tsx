@@ -1,7 +1,7 @@
 import { UploadOutlined } from "@ant-design/icons";
 import { Button, Col, Progress, Row, Upload, UploadProps, message } from "antd";
 import React, { useState } from "react";
-import { request } from "../http";
+import { request } from "../utils/http";
 import { RcFile, UploadFile } from "antd/es/upload";
 import { AxiosProgressEvent } from "axios";
 import { clone } from "lodash";
@@ -23,7 +23,7 @@ export const BigFile = () => {
     const [fileList, setFileList] = useState<RcFile[]>([]);
     const [sliceList, setSliceList] = useState<ISlice[]>([]);
     const [totalProgress, setTotalProgress] = useState<number>(0);
-    const [md5, setMD5] = useState<string>("")
+    const [md5, setMD5] = useState<string>("");
 
     const props: UploadProps = {
         beforeUpload: (file: RcFile) => {
@@ -42,41 +42,45 @@ export const BigFile = () => {
         const file = fileList[0];
         calculateMD5(file)
             .then(async (md5) => {
-                const md5Name = (md5 as string) + "."+ file.name.split(".")[1];
-                setMD5(md5Name)
+                const md5Name = (md5 as string) + "." + file.name.split(".")[1];
+                setMD5(md5Name);
                 const shouldUpload = await verifyUpload(md5Name);
-                if (!shouldUpload) return message.success("文件已存在，上传成功");
+                if (!shouldUpload)
+                    return message.success("文件已存在，上传成功");
                 if (file.size > BIG_FILE_SIZE) {
                     // big handle
                     getSliceList(file);
                 }
-                // // normal handle
-                // upload("/uploadSingle", file);
+                // normal handle
+                const formData = new FormData();
+                formData.set("file", file);
+                formData.set("name", md5Name);
+                request.post("/uploadSingle", formData);
             })
             .catch(() => message.error("获取 MD5 之失败"));
     };
 
-    const calculateMD5 = (file: any) => new Promise((resolve, reject) => {
-        const chunkSize = SLICE_FILE_SIZE
-        const fileReader = new FileReader();
-        const spark = new SparkMD5.ArrayBuffer();
-        let cursor = 0;
-        fileReader.onerror = () => {
-            reject(new Error('Error reading file'));
-        };
-        fileReader.onload = (e: any) => {
-            spark.append(e.target.result);
-            cursor += e.target.result.byteLength;
-            if (cursor < file.size) loadNext();
-            else resolve(spark.end());
-            
-        };
-        const loadNext = () => {
-            const fileSlice = file.slice(cursor, cursor + chunkSize);
-            fileReader.readAsArrayBuffer(fileSlice);
-        }
-        loadNext();
-    });
+    const calculateMD5 = (file: any) =>
+        new Promise((resolve, reject) => {
+            const chunkSize = SLICE_FILE_SIZE;
+            const fileReader = new FileReader();
+            const spark = new SparkMD5.ArrayBuffer();
+            let cursor = 0;
+            fileReader.onerror = () => {
+                reject(new Error("Error reading file"));
+            };
+            fileReader.onload = (e: any) => {
+                spark.append(e.target.result);
+                cursor += e.target.result.byteLength;
+                if (cursor < file.size) loadNext();
+                else resolve(spark.end());
+            };
+            const loadNext = () => {
+                const fileSlice = file.slice(cursor, cursor + chunkSize);
+                fileReader.readAsArrayBuffer(fileSlice);
+            };
+            loadNext();
+        });
 
     const getSliceList = (file: RcFile) => {
         const sliceList: ISlice[] = [];
@@ -175,9 +179,11 @@ export const BigFile = () => {
 
                     <Col span={12}>
                         切片进度
-                        {sliceList.map((item,index) => (
+                        {sliceList.map((item, index) => (
                             <Row gutter={[16, 16]} align="middle" key={item.id}>
-                                <Col span={6}>{fileList[0].name}-{index}:</Col>
+                                <Col span={6}>
+                                    {fileList[0].name}-{index}:
+                                </Col>
                                 <Col span={18}>
                                     <Progress percent={item.progress} />
                                 </Col>

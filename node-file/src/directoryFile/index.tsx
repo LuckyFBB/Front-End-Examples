@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Upload, message, Button } from "antd";
 import type { UploadProps } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
-import { request } from "../http";
+import { request } from "../utils/http";
 
 export const DirectoryFile = () => {
     const [fileList, setFileList] = useState<any>([]);
