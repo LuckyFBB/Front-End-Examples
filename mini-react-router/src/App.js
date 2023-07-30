@@ -1,6 +1,6 @@
 import "./style.css";
-import { HashRouter, Link } from "./react-router-dom"
-import { Route, Switch, Redirect } from "./react-router"
+import { HashRouter, Link, Route, Routes, Navigate } from "./react-router-dom";
+import { Outlet } from "./react-router/Outlet";
 
 export default function App() {
     return (
@@ -10,20 +10,27 @@ export default function App() {
                 <Link to="/home/1">首页1</Link>
                 <Link to="/about">关于</Link>
                 <Link to="/list">列表</Link>
+                <Link to="/navigate">重定向</Link>
             </div>
-            <Switch>
-                <Route path="/home" component={Home}></Route>
-                <Route path="/home/1" component={Home1}></Route>
-                <Route path="/about" component={About}></Route>
-                <Route path="/list" component={List}></Route>
-                <Route path="/notFound" component={NotFound} />
-                <Route path="/a" render={() => <Redirect to="/notFound" />} />
-            </Switch>
+            <Routes>
+                <Route path="/home" element={<Home />}>
+                    <Route path="1" element={<Home1 />}></Route>
+                </Route>
+                <Route path="/about" element={<About />}></Route>
+                <Route path="/list" element={<List />}></Route>
+                <Route path="/notFound" element={<NotFound />} />
+                <Route path="/navigate" element={<Navigate to="/notFound" />} />
+            </Routes>
         </HashRouter>
     );
 }
 
-const Home = () => <div>首页</div>;
+const Home = () => (
+    <div>
+        首页
+        <Outlet />
+    </div>
+);
 const Home1 = () => <div>首页1</div>;
 const About = () => <div>关于</div>;
 const List = () => <div>列表</div>;

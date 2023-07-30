@@ -1,43 +1,30 @@
 import React from "react";
-import { IHistory, ILocation } from "../history";
-import RouterContext from "./RouterContext";
+import { ILocation } from "../history";
+import { LocationContext, NavigationContext } from "./Context";
 interface IProps {
-    history: IHistory;
+    navigator: { push: (to: string) => void };
     location: ILocation;
-    children: React.ReactNode
+    children: React.ReactNode;
 }
 
-class Router extends React.Component<IProps, { location: ILocation }> {
-    unlisten: any
-    constructor(props: IProps) {
-        super(props);
-        this.state = {
-            location: props.history.location // 将history的location挂载到state上
-        };
+export function Router(props: IProps) {
+    const { navigator, children, location } = props;
 
-        // 通过history监听路由变化，变化的时候，改变state上的location
-        this.unlisten = props.history.listen((location: ILocation) => {
-            this.setState({ location });
-        });
-    }
-    componentDidMount() { }
-    componentWillUnmount() {
-        this.unlisten();
-    }
-    render() {
-        const { history, children } = this.props;
-        const { location } = this.state;
-        return (
-            <RouterContext.Provider
-                value={{
-                    history,
-                    location
-                }}
-            >
-                {children}
-            </RouterContext.Provider>
-        );
-    }
+    const navigationContext = React.useMemo(() => ({ navigator }), [navigator]);
+
+    const { pathname } = location;
+
+    const locationContext = React.useMemo(
+        () => ({ location: { pathname } }),
+        [pathname]
+    );
+
+    return (
+        <NavigationContext.Provider value={navigationContext}>
+            <LocationContext.Provider
+                value={locationContext}
+                children={children}
+            />
+        </NavigationContext.Provider>
+    );
 }
-
-export default Router

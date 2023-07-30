@@ -10,8 +10,8 @@ export const EventEmitter = () => {
                 events = events.filter((handler) => handler !== fn);
             };
         },
-        emit(arg: { pathname: string; }) {
-            events.forEach((fn) => fn && fn(arg));
-        }
+        emit(arg: { location: ILocation }) {
+            events.forEach((fn) => fn?.(arg));
+        },
     };
 };

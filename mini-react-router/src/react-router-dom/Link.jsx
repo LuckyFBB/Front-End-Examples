@@ -1,25 +1,19 @@
 import React from "react";
-import RouterContext from "../react-router/RouterContext";
+import { useNavigate } from "../react-router/Hooks";
 
-export default class Link extends React.Component {
-    render() {
-        const { to, children } = this.props;
-        return (
-            <RouterContext.Consumer>
-                {(context) => {
-                    return (
-                        <a
-                            href={to}
-                            onClick={(event) => {
-                                event.preventDefault();
-                                context.history.push(to);
-                            }}
-                        >
-                            {children}
-                        </a>
-                    );
-                }}
-            </RouterContext.Consumer>
-        );
-    }
+export function Link({ to, children, onClick }) {
+    const navigate = useNavigate();
+
+    const handleClick = onClick
+        ? onClick
+        : (event) => {
+              event.preventDefault();
+              navigate(to);
+          };
+
+    return (
+        <a href={to} onClick={handleClick}>
+            {children}
+        </a>
+    );
 }

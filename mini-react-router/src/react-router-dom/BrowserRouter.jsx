@@ -1,6 +1,7 @@
 import React from "react";
 import { createBrowserHistory as createHistory } from "../history";
-import Router from "../react-router/Router";
+
+import { Router } from "../react-router";
 
 class BrowserRouter extends React.Component {
     history = createHistory();

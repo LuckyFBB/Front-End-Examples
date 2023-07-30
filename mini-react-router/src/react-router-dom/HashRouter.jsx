@@ -1,12 +1,27 @@
 import React from "react";
-import { createHashHistory as createHistory } from "../history";
+import { createHashHistory } from "../history";
 import { Router } from "../react-router";
 
-class HashRouter extends React.Component {
-    history = createHistory();
-    render() {
-        return <Router history={this.history} children={this.props.children} />;
+export default function HashRouter({ children }) {
+    let historyRef = React.useRef();
+    if (historyRef.current == null) {
+        historyRef.current = createHashHistory();
     }
-}
+    let history = historyRef.current;
+    let [state, setState] = React.useState({
+        location: history.location,
+    });
 
-export default HashRouter;
+    React.useEffect(() => {
+        const unListen = history.listen(setState);
+        return unListen;
+    }, [history]);
+
+    return (
+        <Router
+            children={children}
+            location={state.location}
+            navigator={history}
+        />
+    );
+}
