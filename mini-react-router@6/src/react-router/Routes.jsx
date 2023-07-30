@@ -30,26 +30,19 @@ const _renderMatches = (matches, parentMatches = []) => {
                 children = outlet;
             }
             return (
-                <RenderedRoute
-                    routeContext={{
+                <RouteContext.Provider
+                    value={{
                         outlet,
                         matches,
                     }}
-                    children={children}
-                />
+                >
+                    {children}
+                </RouteContext.Provider>
             );
         };
         return getChildren();
     }, null);
 };
-
-function RenderedRoute({ routeContext, children }) {
-    return (
-        <RouteContext.Provider value={routeContext}>
-            {children}
-        </RouteContext.Provider>
-    );
-}
 
 const matchRoutes = (routes, location) => {
     const branches = flattenRoutes(routes);
@@ -61,6 +54,7 @@ const matchRoutes = (routes, location) => {
     return matches;
 };
 
+// 来找到待渲染的路由分支
 const matchRouteBranch = (branch, pathname) => {
     const { routesMeta } = branch;
     const matches = [];
@@ -106,6 +100,7 @@ const matchPath = (pattern, pathname) => {
 
 export const joinPaths = (paths) => paths.join("/").replace(/\/\/+/g, "/");
 
+// 获取到当前
 const compilePath = (path, end = true) => {
     let paramNames = [];
     let regexpSource =
@@ -157,6 +152,7 @@ const flattenRoutes = (
     return branches;
 };
 
+// 可以把 <Route> 类型的 react element 对象，变成了普通的 route 对象结构
 const createRoutesFromChildren = (children) => {
     /* 从把变成层级嵌套结构  */
     let routes = [];
