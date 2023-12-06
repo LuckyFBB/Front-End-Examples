@@ -1,0 +1,16 @@
+{
+    "name": "mini-redux",
+    "version": "1.0.0",
+    "description": "",
+    "scripts": {
+        "test": "node dist//example.js",
+        "build": "rm -rf dist && tsc",
+        "debug": "tsc -w"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "redux": "^5.0.0",
+        "typescript": "^5.3.2"
+    }
+}

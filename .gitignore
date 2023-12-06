@@ -4,3 +4,7 @@
 node_modules/
 
 /node-file/src/public
+
+*.log
+
+**/*/dist
