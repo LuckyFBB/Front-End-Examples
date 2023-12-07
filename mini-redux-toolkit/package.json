@@ -4,8 +4,8 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "test": "node dist/example/example.js",
-        "test1": "node dist/example1/example.js",
+        "test:reducer": "node dist/examples/example_reducer/example.js",
+        "test:slice": "node dist/examples/example_slice/example.js",
         "build": "rm -rf dist && tsc",
         "debug": "tsc -w"
     },

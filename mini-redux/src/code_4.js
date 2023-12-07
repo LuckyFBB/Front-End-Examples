@@ -83,7 +83,7 @@ const reducers = combineReducers({
 const store = createStore(reducers, initialState);
 store.subscribe(() => {
     const state = store.getState();
-    console.log(state.counter.count, state.user.name, state.user.age);
+    console.log(state);
 });
 store.dispatch({ type: "UPDATE_NAME", name: "FBB" });
 store.dispatch({ type: "UPDATE_AGE", age: "28" });

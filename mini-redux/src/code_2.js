@@ -31,7 +31,7 @@ const { getState, changeState, subscribe } = createStore({
     age: 19,
 });
 
-subscribe(() => console.log(getState().name, getState().age));
+subscribe(() => console.log(getState()));
 
 changeState({ name: "FBB" });
 changeState({ age: 26 });

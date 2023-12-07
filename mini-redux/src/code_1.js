@@ -14,7 +14,7 @@ const changeName = (name) => {
     });
 };
 
-subscribe(() => console.log(state.name));
+subscribe(() => console.log(state));
 
 changeName("FBB");
 changeName("LuckyFBB");

@@ -48,7 +48,7 @@ const { getState, changeState, subscribe } = createStore(plan, {
     age: 19,
 });
 
-subscribe(() => console.log(getState().name, getState().age));
+subscribe(() => console.log(getState()));
 
 changeState({ type: "UPDATE_NAME", name: "FBB" });
 changeState({ type: "UPDATE_AGE", age: "28" });
