@@ -6,6 +6,7 @@
     "scripts": {
         "test:reducer": "node dist/examples/example_reducer/example.js",
         "test:slice": "node dist/examples/example_slice/example.js",
+        "test:example": "node dist/src/example.js",
         "build": "rm -rf dist && tsc",
         "debug": "tsc -w"
     },
@@ -13,6 +14,8 @@
     "license": "ISC",
     "dependencies": {
         "@reduxjs/toolkit": "^2.0.1",
+        "immer": "^10.0.3",
+        "redux": "^5.0.0",
         "typescript": "^5.3.2"
     }
 }
