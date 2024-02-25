@@ -1,0 +1,17 @@
+{
+    "name": "mini-babel",
+    "version": "1.0.0",
+    "main": "index.js",
+    "license": "MIT",
+    "bin": {
+        "my-babel": "./src/cli/index.js"
+    },
+    "dependencies": {
+        "acorn": "^8.7.0",
+        "chokidar": "^3.5.3",
+        "commander": "^9.1.0",
+        "cosmiconfig": "^7.0.1",
+        "glob": "^7.2.0",
+        "source-map": "^0.7.3"
+    }
+}
